@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const domain ="http://localhost:4000"
+export const domain =process.env.NEXT_PUBLIC_DOMAIN
