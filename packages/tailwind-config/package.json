@@ -5,6 +5,10 @@
   "exports": {
     ".": "./tailwind.config.ts"
   },
+  "dependencies": {
+    "@uploadthing/react": "^7.1.5",
+    "uploadthing": "^7.4.4"
+  },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "tailwindcss": "^3.4.17"

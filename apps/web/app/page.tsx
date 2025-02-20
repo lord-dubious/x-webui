@@ -1,10 +1,27 @@
-import Image from "next/image";
-import { Card } from "@repo/ui/card";
+"use client"
 
-export default function Page() {
+import { useAuth } from "../lib/authContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+
+export default function Home() {
+
+  const router = useRouter();
+  const {isAuthenticated}= useAuth()
+
+  useEffect(() => {
+
+    if(isAuthenticated) {
+      router.push("/dashboard/home");
+    }
+    else {
+      
+      router.push("/login");
+    }
+  
+  })
   return (
-   <div className="text-yellow-200 bg-white">
-    Hello
-   </div>
+    <div className=""></div>
   );
 }
