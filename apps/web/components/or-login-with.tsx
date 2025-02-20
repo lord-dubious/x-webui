@@ -17,7 +17,7 @@ const OrLoginWith = () => {
     useEffect(() => {
         const eventOnMessage = (event:MessageEvent) => {
             // Ignore messages from any other origin
-            if (event.origin !== "http://localhost:4000") {
+            if (event.origin !== process.env.NEXT_PUBLIC_DOMAIN) {
                 return;  
             }
             const {success, message}= event.data || {}
@@ -51,7 +51,7 @@ const OrLoginWith = () => {
 
     const openLoginGooglePopup = () => {
 
-        const googleLoginUrl = "http://localhost:4000/api/v1/user/google";
+        const googleLoginUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/v1/user/google`;
 
        window.open(
             googleLoginUrl,
