@@ -1,6 +1,6 @@
 "use client"
 import React, { Suspense } from 'react'
-import PasswordReset from './passwordReset'
+import PasswordReset from './PasswordReset'
 
 const PasswordResetPage = () => {
   return (
