@@ -236,12 +236,13 @@ const {showNotification} = useNotification();
     const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
       try{
         const URL = `${domain}/api/v1/user/logout`;
+
+        const response = await axios.post(URL, {},{
+          withCredentials:true,
+        });
         Cookies.remove("auth_token", {
           path: "/",
           domain: isProduction ? ".tweetly.in" : undefined,
-        });
-        const response = await axios.post(URL, {},{
-          withCredentials:true,
         });
         setIsAuthenticated(false);
         await router.push("/login");
