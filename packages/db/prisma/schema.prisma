@@ -9,10 +9,171 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
+model TempUser {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  email        String   @unique
+  password     String
+  otp          String
+  otpExpiresAt DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  verified     Boolean  @default(false)
+
+  @@map("temp_users")
+}
+
 model User {
-  id String @id @default(uuid())
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  email          String    @unique
+  password       String?
+  authProvider   String    @default("email_password")
+  name           String?
+  googleId       String?
+  profilePicture String?
+  createdAt      DateTime? @default(now())
+
+  token    Token[]
+  twitter  Twitter?
+  tweet    Tweet[]
+  post     Post[]
+  category Category[]
+  file    File[]
+
+  @@map("users")
+}
+
+model Token {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  token  String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("tokens")
+}
+
+model Twitter {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  twitterId      String
+  username       String
+  name           String
+  profilePicture String?
+  authProvider   String
+  accessToken    String
+  refreshToken   String
+  userId         String  @db.ObjectId @unique
+  user           User    @relation(fields: [userId], references: [id])
+
+  @@map("twitter")
+}
+
+model Tweet {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  tweetId     String
+  username    String
+  description String
+  createdAt   DateTime @default(now())
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+
+  categoryId String?   @db.ObjectId
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete:SetNull)
+
+  @@map("tweet")
+}
+
+model Post {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  postContent  String
+  status       PostStatus @default(DRAFT)
+  creatAedt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  scheduledFor DateTime?
+  tweetId      String?
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  fileIds String[] @db.ObjectId
+  files File[] @relation(fields: [fileIds], references: [id])
+
+  @@map("post")
+}
+
+model File {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  fileName   String
+  fileType   String
+  fileSize   Int
+  fileURL    String
+  uploadedAt DateTime @default(now())
+
+  // postId     String?   @db.ObjectId
+  // post       Post?     @relation(fields: [postId], references: [id])
+  postIds String[] @db.ObjectId
+  posts Post[] @relation(fields: [postIds], references: [id])
+
+  userId   String @db.ObjectId
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("files")
+}
+
+model Category {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name      String
+  createdAt DateTime @default(now())
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+
+  tweets Tweet[]
+
+  @@unique([name, userId]) // this a composite unqiue constraint
+
+  @@map("category")
+}
+
+model Bot {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  tag String
+  imageURL String
+  twitterLink String
+  profile String?
+  botTweet BotTweet[]
+
+  @@map("bots")
+}
+
+model BotTweet {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  tweetId String
+  text String
+  likes Int
+  retweets Int
+  replies Int
+  timestamp DateTime @default(now())
+  embedding Float[]
+  botId String @db.ObjectId
+  bot Bot @relation(fields: [botId], references: [id])
+
+  @@map("bottweets")
+}
+enum FileType {
+  IMAGE
+  VIDEO
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
 }
