@@ -8,7 +8,22 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images:{
-    domains: ['lh3.googleusercontent.com', 'pbs.twimg.com', 'i.postimg.cc', 'utfs.io', 'cytd5kmgz6.ufs.sh']
+    remotePatterns: [
+      {protocol:"https",
+        hostname:"lh3.googleusercontent.com"
+      },
+      {protocol:"https",
+        hostname:"pbs.twimg.com"
+      },
+      {protocol:"https",
+        hostname:"i.postimg.cc"
+      },
+      {protocol:"https",
+        hostname:"utfs.io"
+      },
+      {protocol:"https",
+        hostname:"cytd5kmgz6.ufs.sh"
+      }]
   }
 };
 
