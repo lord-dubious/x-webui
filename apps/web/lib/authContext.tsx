@@ -200,6 +200,7 @@ const {showNotification} = useNotification();
   
         setIsAuthenticated(true);
         const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
+        console.log()
         Cookies.set("auth_token", result.data.token, {expires:7, 
           path:"/",
           domain: isProduction?".tweetly.in":undefined,
@@ -232,9 +233,13 @@ const {showNotification} = useNotification();
     }
     
   const logout = async () => {
-
+    const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
       try{
         const URL = `${domain}/api/v1/user/logout`;
+        Cookies.remove("auth_token", {
+          path: "/",
+          domain: isProduction ? ".tweetly.in" : undefined,
+        });
         const response = await axios.post(URL, {},{
           withCredentials:true,
         });

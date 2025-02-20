@@ -182,8 +182,18 @@ userRouter.post("/login", async (req, res)=> {
                 }
             })
 
-            res.clearCookie("auth_token");
-            res.clearCookie("connect.sid")
+            res.clearCookie("auth_token", {
+                path: "/",
+                domain: process.env.NODE_ENV === "production" ? ".tweetly.in" : undefined,
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                secure: process.env.NODE_ENV === "production"
+              });
+              res.clearCookie("connect.sid", {
+                path: "/",
+                domain: process.env.NODE_ENV === "production" ? ".tweetly.in" : undefined,
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                secure: process.env.NODE_ENV === "production"
+              });
 
             res.status(200).json({ message: "Logged out successfully" });
 
