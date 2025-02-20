@@ -199,8 +199,14 @@ const {showNotification} = useNotification();
         const result = await axios.post(URL, data)
   
         setIsAuthenticated(true);
-
-        Cookies.set("auth_token", result.data.token, {expires:7, path:"/"});
+        const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
+        Cookies.set("auth_token", result.data.token, {expires:7, 
+          path:"/",
+          domain: isProduction?".tweetly.in":undefined,
+          sameSite:isProduction?"none":"lax",
+          secure: isProduction
+        
+        });
 
         await router.push("/dashboard/home");
         

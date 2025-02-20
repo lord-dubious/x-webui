@@ -4,6 +4,7 @@ import { JWT_SECRET, prisma } from "../config";
 
 
 const authMiddleware = async (req:Request, res:Response, next:NextFunction) => {
+    console.log("cookies next")
  console.log(req.cookies);
     const token = req.cookies.auth_token;
     console.log(token);
