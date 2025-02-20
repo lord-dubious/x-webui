@@ -5,7 +5,7 @@ import axios from "axios";
 import { useContext , createContext, useState, useEffect, ReactElement} from "react";
 import { domain } from "./utils";
 import Cookies from "js-cookie";
-import {OpenAI} from "@langchain/openai"
+import OpenAI from "openai";
 
 
 
@@ -267,7 +267,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
         return;
     }
     const lastMessage = chatHistory[0]?.content;
-    const embeddingVector = await getEmbedding(lastMessage);
+    const embeddingVector = await getEmbedding(lastMessage || "") ;
     const tweetContext = await getContext(embeddingVector);
 
     const systemMessage: Message = {
@@ -380,6 +380,7 @@ If the provided context lacks sufficient details for the request, rely on your p
   }
 
   const getEmbedding = async (message:string) => {
+    console.log(openAiKey)
     let embeddingVector:number[] =[];
     try {
       const embeddingResponse = await openai.embeddings.create({
