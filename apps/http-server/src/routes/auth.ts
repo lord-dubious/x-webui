@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { z } from "zod";
 import bcrypt from "bcrypt"
-import { JWT_SECRET, prisma } from "../config";
+import { JWT_SECRET, MAIN_URL, prisma } from "../config";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middlewares/auth-middleware";
 import { sendOTPEmail, sendPasswordResetConfirmationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "../emailer";
@@ -271,7 +271,7 @@ try {
                 <script>
                 window.opener.postMessage({
                 success:true, message:"Login Successfull"
-                }, 'http://localhost:3000')
+                }, '${MAIN_URL}')
                 window.close();
 
                 </script>

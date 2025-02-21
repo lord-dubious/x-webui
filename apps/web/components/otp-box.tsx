@@ -42,13 +42,13 @@ const OtpBox = forwardRef(({
 
   const onChangeBox = (event:ChangeEvent, index:number) => {
 
-    const value = arr[index].current?.value;
-    if(value && value.length >1 && arr[index].current) {
+    const value = arr[index]?.current?.value;
+    if(value && value.length >1 && arr[index]?.current) {
         arr[index].current.value = value.slice(0,1);
     }
 
     if(index !=3 && value?.length == 1) {
-        arr[index+1].current?.focus();
+        arr[index+1]?.current?.focus();
     } 
 
   }
@@ -57,15 +57,15 @@ const OtpBox = forwardRef(({
     console.log(event.key)
 
     if(index !=0 && event.key == "Backspace" &&  arr[index]?.current?.value === "") {
-        arr[index-1].current?.focus();
+        arr[index-1]?.current?.focus();
     } 
 
     if(event.key == "ArrowRight" && index !=3) {
-        arr[index+1].current?.focus();
+        arr[index+1]?.current?.focus();
 
     }
     if(event.key == "ArrowLeft" && index !=0) {
-        arr[index-1].current?.focus();
+        arr[index-1]?.current?.focus();
 
     }
 
