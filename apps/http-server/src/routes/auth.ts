@@ -294,7 +294,7 @@ try {
           // Return an error response
           res.send(`
             <script>
-                window.opener.postMessage({ success: false, message:"Internal Server Error" }, 'http://localhost:3000');
+                window.opener.postMessage({ success: false, message:"Internal Server Error" }, ${MAIN_URL});
                 window.close();
             </script>
         `);
