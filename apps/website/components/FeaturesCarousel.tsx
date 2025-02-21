@@ -52,19 +52,23 @@ export default function FeaturesCarousel() {
       <div className="rounded-lg p-8 shadow-lg transition-all duration-500">
         <div className="flex flex-col items-center">
           <div className="relative w-full mb-6">
+            {currentFeature && 
+            (
             <Image
-              src={currentFeature.image}
-              alt={currentFeature.title}
+              src={currentFeature?.image}
+              alt={currentFeature?.title}
               width={800}
               height={800}
               className="w-full rounded-2xl shadow-sm shadow-gray-50 transition-transform duration-500 ease-out transform hover:scale-105"
             />
+            )}
+            
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mt-4  mb-2">
-            {currentFeature.title}
+            {currentFeature?.title}
           </h2>
           <p className="text-lg text-gray-300 mb-6 text-center max-w-3xl">
-            {currentFeature.description}
+            {currentFeature?.description}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {featuresData.map((feature, idx) => (
