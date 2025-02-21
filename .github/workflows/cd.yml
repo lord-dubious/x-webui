@@ -20,5 +20,15 @@ jobs:
                               username: avishmadaan
                               key: ${{secrets.SSH_PRIVATE_KEY}}
                               port: 22
-                              
+                              script: |
+                                  export PATH=/home/avishmadaan/.nvm/versions/node/v22.14.0/bin/npm
+                                  cd tweetly
+                                  git pull 
+                                  npm i -g pnpm
+                                  pnpm install
+                                  echo "everything set here"
+                                  pnpm run build
+                                  pm2 restart web
+                                  pm2 restart http-server
+                                  pm2 restart website
     
