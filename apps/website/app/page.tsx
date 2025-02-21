@@ -1,13 +1,19 @@
+import CardsMarquee from "@/components/Cards";
+import FeaturesCarousel from "@/components/FeaturesCarousel";
+import Footer from "@/components/footer";
+import HeroSection from "@/components/HeroSection";
+import NavBar from "@/components/NavBar";
 
 
 export default function Home() {
   return (
     <div className="">
-      <a href="https://app.tweetly.in" className="">
-      <button
-      className="p-2 bg-white text-black"
-      >Access our App</button>
-      </a>
+      <NavBar />
+       <HeroSection />
+       <FeaturesCarousel />
+       <CardsMarquee />
+       <Footer />
+     
     </div>
   );
 }
