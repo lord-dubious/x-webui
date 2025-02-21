@@ -18,7 +18,7 @@ const TwitterIntegration = () => {
     useEffect(() => {
 
       const eventOnMessage = async (event:MessageEvent) => {
-        if (event.origin !== "http://localhost:4000") {
+        if (event.origin !== process.env.NEXT_PUBLIC_DOMAIN) {
           return;  
       }
 

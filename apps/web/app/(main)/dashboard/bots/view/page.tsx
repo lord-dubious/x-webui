@@ -1,10 +1,8 @@
 "use client"
 import BotCard from '@/components/bot-card'
 import CreateYourBot from '@/components/create-your-bot'
-import { Button } from '@/components/ui/button'
 import ToolTip from '@/components/ui/tooltip'
 import { UseAi } from '@/lib/aiContext'
-import { Pencil } from 'lucide-react'
 
 import React, { useState } from 'react'
 

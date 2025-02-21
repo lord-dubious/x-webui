@@ -150,7 +150,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
 
     const integrateX = () => {
 
-        const twitterIntegrateUrl = "http://localhost:4000/api/v1/user/path/auth/twitter"
+        const twitterIntegrateUrl = `${process.env.NEXT_PUBLIC_DOMAIN}/api/v1/user/path/auth/twitter`
 
         window.open(
             twitterIntegrateUrl,

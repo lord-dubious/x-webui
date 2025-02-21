@@ -2,9 +2,8 @@
 import {
   Bot,
   Brain,
-
   Calendar1Icon,
-
+  CircleX,
   HelpCircle,
   Home,
   Send,
@@ -27,8 +26,6 @@ type menuItems = {
 
 // Menu items.
 const items: menuItems[] = [
-
-  
   {
     title: "Home",
     url: "/dashboard/home",
@@ -49,8 +46,7 @@ const items: menuItems[] = [
     url: "/dashboard/schedule",
     icon: <Calendar1Icon />,
   },
-  
-  
+
   {
     title: "Bots",
     url: "/dashboard/bots",
@@ -69,72 +65,67 @@ const items: menuItems[] = [
 ];
 
 export function AppSidebar() {
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  const {open, setOpen} = useSidebarContext();
+  const { open, setOpen } = useSidebarContext();
 
   return (
-    <div className={`absolute md:static border-r h-full overflow-auto  z-10 dark:bg-black bg-white flex flex-col
+    <div
+      className={`absolute md:static border-r h-full overflow-auto  z-10 dark:bg-black bg-white flex flex-col
       
-    ${open? "md:min-w-[250px] md:w-[250px] p-4 w-full":"md:w-[64px] flex-none -translate-x-full md:translate-x-0 p-1 pt-4" } transition-all duration-400 ease-in-out
+    ${open ? "md:min-w-[250px] md:w-[250px] p-4 w-full" : "md:w-[64px] flex-none -translate-x-full md:translate-x-0 p-1 pt-4"} transition-all duration-400 ease-in-out
     
-     `}>
+     `}
+    >
       <div
         className="flex justify-between items-center relative
           "
       >
         <Link href={"/dashboard"} className="flex items-center gap-1 py-2">
-        <Image
-  src={icon_v1_dark}
-  className="w-[50px] cursor-pointer  brightness-0 dark:invert"
-  alt="logo"
-  width={50}
-  height={50}
-/>
+          <Image
+            src={icon_v1_dark}
+            className="w-[50px] cursor-pointer  brightness-0 dark:invert"
+            alt="logo"
+            width={50}
+            height={50}
+          />
           {open && (
-
-          <h1 className="text-4xl font-bold cursor-pointer">Tweetly</h1>
+            <h1 className="text-4xl font-bold cursor-pointer">Tweetly</h1>
           )}
         </Link>
 
-        {/* <CircleX size={28} className="md:hidden block" onClick={()=> setOpen((val) => !val)} /> */}
+        <CircleX size={28} className="md:hidden block cursor-pointer" onClick={()=> setOpen((val) => !val)} />
+
       </div>
-      
 
       <div
         className=" mt-5 text-gray-600 relative
           "
         id="menus"
       >
-{items.map((item, index) => (
-  <NavbarItem
-  className="my-4"
-    name={item.title}
-    icon={item.icon}
-    key={index}
-    url={item.url}
-    open={open}
-    isActive={pathname.startsWith(item.url)}
-  />
-))}
-
-
-
+        {items.map((item, index) => (
+          <NavbarItem
+            className="my-4"
+            name={item.title}
+            icon={item.icon}
+            key={index}
+            url={item.url}
+            open={open}
+            isActive={pathname.startsWith(item.url)}
+          />
+        ))}
       </div>
 
       <div className="mt-auto" id="help">
-      <NavbarItem
-  className="my-4"
-    name={"Help"}
-    icon={<HelpCircle />}
-    url={"/dashboard/help"}
-    open={open}
-    isActive={pathname.startsWith("/dashboard/help")}
-  />
-
-
+        <NavbarItem
+          className="my-4"
+          name={"Help"}
+          icon={<HelpCircle />}
+          url={"/dashboard/help"}
+          open={open}
+          isActive={pathname.startsWith("/dashboard/help")}
+        />
       </div>
-    
     </div>
   );
 }
@@ -146,9 +137,11 @@ type SidebarContextType = {
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
-
-
-export const SidebarContextProvider = ({children}:{children:React.ReactNode}) => {
+export const SidebarContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [open, setOpen] = useState<boolean>(true);
 
   useEffect(() => {
@@ -161,20 +154,17 @@ export const SidebarContextProvider = ({children}:{children:React.ReactNode}) =>
       }
     };
 
-     // Run on mount and resize
-     handleResize();
-     window.addEventListener("resize", handleResize);
-
+    // Run on mount and resize
+    handleResize();
+    window.addEventListener("resize", handleResize);
   }, []);
 
-  return (<SidebarContext.Provider value={{open, setOpen}}>
-    {children}
-  </SidebarContext.Provider>
-
-  )
-
-}
-
+  return (
+    <SidebarContext.Provider value={{ open, setOpen }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+};
 
 export const useSidebarContext = () => {
   const context = useContext(SidebarContext);
