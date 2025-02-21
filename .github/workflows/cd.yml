@@ -5,7 +5,7 @@ on:
 
 jobs:
     redeploy_everything:
-                        runs-on: unbuntu-latest
+                        runs-on: ubuntu-latest
                         name: Deploy Everything
                         steps:
                           - name: Checkout the code
@@ -21,7 +21,7 @@ jobs:
                               key: ${{secrets.SSH_PRIVATE_KEY}}
                               port: 22
                               script: |
-                                  export PATH=/home/avishmadaan/.nvm/versions/node/v22.14.0/bin/npm
+                                  export PATH=/home/avishmadaan/.nvm/versions/node/v22.14.0/bin:$PATH
                                   cd tweetly
                                   git pull 
                                   npm i -g pnpm
