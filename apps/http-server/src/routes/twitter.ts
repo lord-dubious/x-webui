@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import passport from "../configuration/passportConfig"; 
 import authMiddleware from "../middlewares/auth-middleware";
-import { prisma } from "../config";
+import { MAIN_URL, prisma } from "../config";
 
 
 const twitterRouter:Router = Router();
@@ -28,7 +28,7 @@ twitterRouter.get(
             <script>
             window.opener.postMessage({
             login:true, message:"X Login Successfull"
-            }, 'http://localhost:3000')
+            }, '${MAIN_URL})
             window.close();
 
             </script>
