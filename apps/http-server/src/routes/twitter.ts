@@ -27,12 +27,13 @@ twitterRouter.get(
         res.send(`
             <script>
             window.opener.postMessage({
-            login:true, message:"X Login Successfull"
-            }, '${MAIN_URL})
+            success:true, message:"X Integrated Successfully"
+            }, '${MAIN_URL}')
             window.close();
 
             </script>
             `)
+
 
        }
 
