@@ -43,7 +43,7 @@ twitterRouter.get(
  
           res.send(`
             <script>
-                window.opener.postMessage({ login: false, message:"Internal Server Error" }, 'http://localhost:3000');
+                window.opener.postMessage({ login: false, message:"Internal Server Error" }, ${MAIN_URL});
                 window.close();
             </script>
         `);
