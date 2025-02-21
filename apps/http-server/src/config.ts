@@ -18,7 +18,4 @@ export const UPLOADTHING_SECRET = process.env.UPLOADTHING_SECRET;
 export const UPLOADTHING_APP_ID = process.env.UPLOADTHING_APP_ID;
 
 
-export const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
-export const ASTRA_DB_API_ENDPOINT = process.env.ASTRA_DB_API_ENDPOINT;
-export const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
-export const ASTRA_DB_COLLECTION =  process.env.ASTRA_DB_COLLECTION
+export const NODE_ENV = process.env.NODE_ENV

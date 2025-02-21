@@ -201,7 +201,9 @@ const {showNotification} = useNotification();
         setIsAuthenticated(true);
         const isProduction = process.env.NEXT_PUBLIC_NODE_ENV === "production";
         console.log()
-        Cookies.set("auth_token", result.data.token, {expires:7, 
+        Cookies.set("auth_token", 
+          result.data.token, 
+          {expires:7, 
           path:"/",
           domain: isProduction?".tweetly.in":undefined,
           sameSite:isProduction?"none":"lax",

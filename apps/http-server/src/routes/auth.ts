@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { z } from "zod";
 import bcrypt from "bcrypt"
-import { JWT_SECRET, MAIN_URL, prisma } from "../config";
+import { JWT_SECRET, MAIN_URL, NODE_ENV, prisma } from "../config";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middlewares/auth-middleware";
 import { sendOTPEmail, sendPasswordResetConfirmationEmail, sendPasswordResetEmail, sendWelcomeEmail } from "../emailer";
@@ -256,13 +256,21 @@ try {
                 JWT_SECRET as string, 
                 { expiresIn: '1d' }
             );
+            const isProduction = (NODE_ENV === "production");
 
-            res.cookie("auth_token",token);
+            res.cookie("auth_token", token, 
+                {
+                    expires:new Date(Date.now() + 7*24*60*60*1000),
+                    path:"/",
+                    domain: isProduction?".tweetly.in":undefined,
+                    sameSite:isProduction?"none":"lax",
+                    secure: isProduction
+                }
+            );
             await prisma.token.create({
                 data:{
                     userId:user.id,
-                    token:token
-                    
+                    token:token            
                 }
             })
 
