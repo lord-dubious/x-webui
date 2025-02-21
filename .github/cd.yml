@@ -1,0 +1,24 @@
+name: Deploy To Tweetly Website
+on:
+  push:
+      branches: [main]
+
+jobs:
+    redeploy_everything:
+                        runs-on: unbuntu-latest
+                        name: Deploy Everything
+                        steps:
+                          - name: Checkout the code
+                            uses: actions/checkout@v2
+
+
+                        
+                          - name: executing remote ssh commands using ssh key
+                            uses: appleboy/ssh-action@v1.2.0
+                            with:
+                              host: 34.131.110.188
+                              username: avishmadaan
+                              key: ${{secrets.SSH_PRIVATE_KEY}}
+                              port: 22
+                              
+    
