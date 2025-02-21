@@ -257,7 +257,7 @@ try {
                 { expiresIn: '1d' }
             );
             const isProduction = (NODE_ENV === "production");
-
+            console.log("isProduction :", isProduction);
             res.cookie("auth_token", token, 
                 {
                     expires:new Date(Date.now() + 7*24*60*60*1000),

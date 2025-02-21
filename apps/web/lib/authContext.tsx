@@ -143,9 +143,9 @@ const {showNotification} = useNotification();
         message:result.data.message,
         type:"positive"
       })
-
+      console.log("pushed")
      await router.push(`/login`)
-     console.log("pushed")
+  
       
       
     }
