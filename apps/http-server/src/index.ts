@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-      origin: ["http://localhost:3000", "https://dev.tweetly.in"], 
+      origin: ["http://localhost:3000", "https://dev.tweetly.in", "https://app.tweetly.in"], 
       credentials: true, 
     })
   );
