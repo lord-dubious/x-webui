@@ -48,7 +48,7 @@ export default function FeaturesCarousel() {
   const currentFeature = featuresData[currentIndex];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-12 bg-black">
       <div className="rounded-lg p-8 shadow-lg transition-all duration-500">
         <div className="flex flex-col items-center">
           <div className="relative w-full mb-6">
@@ -77,7 +77,7 @@ export default function FeaturesCarousel() {
                 onClick={() => handleFeatureClick(idx)}
                 className={`px-4 py-2 rounded-full text-sm transition ${
                   idx === currentIndex
-                    ? "bg-blue-600 text-white"
+                    ? "bg-customBlue text-white"
                     : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                 }`}
               >

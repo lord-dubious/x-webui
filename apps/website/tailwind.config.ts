@@ -13,6 +13,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customBlue: "#1C9AF1",
       },
     },
   },

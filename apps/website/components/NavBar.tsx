@@ -22,7 +22,7 @@ export default function NavBar() {
           </Link> */}
           <Link
             href="https://app.tweetly.in"
-            className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-md font-medium transition"
+            className="bg-customBlue px-5 py-2 rounded-md font-medium transition"
           >
             Try Tweetly
           </Link>

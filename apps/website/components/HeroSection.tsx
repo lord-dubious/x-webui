@@ -8,7 +8,7 @@ export default function HeroSection() {
     <section className="bg-black text-white pt-20 pb-0 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <p className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1 rounded-full bg-gray-800">
-          <Code size={20} className="text-blue-500 animate-pulse" />
+          <Code size={20} className="text-customBlue animate-pulse" />
           <span className="text-lg tracking-wide">Crafted by Devs for Devs</span>
         </p>
         <h1 className="text-6xl md:text-7xl font-extrabold mb-8 leading-tight mt-2">
@@ -30,7 +30,7 @@ export default function HeroSection() {
           href="https://app.tweetly.in"
           target="_self"
           rel="noopener noreferrer"
-          className="inline-flex items-center bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-md text-base font-medium transition"
+          className="inline-flex items-center bg-customBlue  px-6 py-3 rounded-md text-base font-medium transition"
         >
           <Sparkles size={18} className="mr-2 animate-bounce" />
           Try Tweetly

@@ -1,3 +1,4 @@
+import BigHeadline from "@/components/BigHeadline";
 import CardsMarquee from "@/components/Cards";
 import FeaturesCarousel from "@/components/FeaturesCarousel";
 import Footer from "@/components/footer";
@@ -12,6 +13,7 @@ export default function Home() {
        <HeroSection />
        <FeaturesCarousel />
        <CardsMarquee />
+       <BigHeadline />
        <Footer />
      
     </div>

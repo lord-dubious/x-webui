@@ -4,9 +4,12 @@ import type { Config } from "tailwindcss";
 const config: Omit<Config, "content"> = {
   theme: {
     extend: {
-      backgroundImage: {
-        "glow-conic":
-          "conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg)",
+      colors:{
+        customBlack: "#000101",
+        customWhite: "#EEF3F5",
+        customHover: "#191819",
+        customBlue: "#1C9AF1",
+        customSearch: "#212326",
       },
 
     },

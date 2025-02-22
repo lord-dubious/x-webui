@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className=" text-gray-300 py-8 border-t border-opacity-20 border-gray-50 ">
+    <footer className=" text-gray-300 py-8 border-t border-opacity-10 border-gray-50 bg-black">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
         <div className="flex items-center space-x-3 mb-4 md:mb-0">
           <img src="/logo.jpg" alt="Tweetly Logo" className="h-10 w-auto" />
