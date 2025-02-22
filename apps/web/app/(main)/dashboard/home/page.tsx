@@ -23,7 +23,7 @@ export default function Home() {
       </div>
       <div className="flex  gap-4 flex-wrap" id="content">
         <OnboardChecklist  />
-        <div className=" flex flex-col  gap-4" id="3nd">
+        <div className=" flex flex-col  gap-4 flex-grow h-full" id="3nd">
           <HomeTweetBrain />
           <HomeBots />
         </div>

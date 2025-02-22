@@ -23,6 +23,7 @@ jobs:
                               script: |
                                   export PATH=/home/avishmadaan/.nvm/versions/node/v22.14.0/bin:$PATH
                                   cd tweetly
+                                  git stash push -m "local"
                                   git pull 
                                   npm i -g pnpm
                                   pnpm install

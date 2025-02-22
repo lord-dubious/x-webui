@@ -8,22 +8,7 @@ import { Bot, ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 
-type bot = {
-  image: ReactElement;
-  name: string;
-  };
 
-const bots:bot[] = [
-
-  {
-    image:<Image alt='harkirat' src={"https://i.postimg.cc/qgMRmVxm/Playground-Image4.avif"} width={28} height={28} className='rounded-full'/>,
-    name:"Harkirat singh"
-  },
-  {
-    image:<Image alt='harkirat' src={"https://i.postimg.cc/LJDxSNTD/Playground-Image6.avif"} width={28} height={28} className='rounded-full'/>,
-    name:"Striver Aka Raj"
-  }
-]
 
 const Chat = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -90,15 +75,15 @@ const Chat = () => {
 
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 mt-2  h-full overflow-hidden"  id="chatbox">
+          <div className="flex flex-col md:flex-row gap-4 mt-2  h-full md:overflow-hidden overflow-auto"   id="chatbox">
 
-          <div className="md:w-1/4 h-full overflow-hidden" id="botSelection">
+          <div className="md:w-1/4 h-full min-h-96 md:overflow-hidden overflow-auto" id="botSelection">
 
 <BotSelection />
 
 </div>
 
-          <div className="md:w-3/4 h-full overflow-hidden" id="chatbox">
+          <div className="md:w-3/4 h-full md:overflow-hidden overflow-auto min-h-96" id="chatbox">
             <ChatWithBot />
 
             </div>

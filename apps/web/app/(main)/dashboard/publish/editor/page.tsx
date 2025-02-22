@@ -27,7 +27,7 @@ const Editor = () => {
 
 
 
-        <div className="grid grid-cols-2  gap-2 mt-4 w-full " id="contentpreviw">
+        <div className="grid md:grid-cols-2  gap-2 mt-4 w-full " id="contentpreviw">
 
     <RichTextEditor className=" " />
     <PreviewTweet className="rounded-md " currentPostMedia={currentPostMedia} currentTweet={currentTweet}/>

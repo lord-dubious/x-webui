@@ -59,7 +59,7 @@ export default function FeaturesCarousel() {
               alt={currentFeature?.title}
               width={800}
               height={800}
-              className="w-full rounded-2xl shadow-sm shadow-gray-50 transition-transform duration-500 ease-out transform hover:scale-105"
+              className="w-full rounded-2xl shadow-md shadow-gray-50 transition-transform duration-500 ease-out transform hover:scale-105"
             />
             )}
             

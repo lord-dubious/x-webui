@@ -55,11 +55,10 @@ const SchedulingBar = () => {
   }
 
   return (
-    <div className='w-full h-16 bg-gray-200 dark:bg-gray-800 rounded-md flex items-center justify-between p-10 relative'>
-      <div className="flex items-center gap-4" id="section1">
-        <div className="absolute left-4">
+    <div className='w-full h-full  bg-gray-200 dark:bg-gray-800 rounded-md flex md:items-center justify-between p-4 relative flex-wrap '>
+      <div className="flex items-center gap-4 " id="section1">
+
         <ToolTip>Select here when you want to post</ToolTip>
-        </div>
       
 
         
@@ -77,7 +76,7 @@ const SchedulingBar = () => {
 
         
         </div>
-      <div className="flex item-center gap-4" id="section2">
+      <div className="flex item-center gap-4 " id="section2">
 
         <Button
         startIcon={<NotepadText />}

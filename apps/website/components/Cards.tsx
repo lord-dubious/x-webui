@@ -36,9 +36,21 @@ const bots = [
 
 export default function BotsMarquee() {
   return (
-    <section className="w-full py-12 bg-black overflow-hidden relative">
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black via-transparent to-black" />
-      <div className="whitespace-nowrap animate-marquee">
+    <section className="w-full py-16 bg-black overflow-hidden relative text-center">
+      <div className="absolute inset-0 pointer-events-none" />
+
+      {/* Headline */}
+      <div className="mb-24">
+        <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">
+          🚀 Meet the Pros Who Tweet Smart
+        </h2>
+        <p className="text-lg md:text-xl text-gray-300 mt-2">
+        Need inspiration? Stuck on wording? These AI-powered bots help you craft engaging tweets in seconds.
+        </p>
+      </div>
+
+      {/* Marquee Section */}
+      <div className="whitespace-nowrap animate-marquee ">
         {bots.concat(bots).map((bot, idx) => (
           <div
             key={idx}
@@ -65,6 +77,7 @@ export default function BotsMarquee() {
           </div>
         ))}
       </div>
+
       <style jsx>{`
         @keyframes marquee {
           0% {
