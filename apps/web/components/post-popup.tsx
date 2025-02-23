@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import Popup from './ui/popup'
 import PreviewTweet from './preview-tweet'
 import { UseX } from '@/lib/xContext'
@@ -8,7 +8,30 @@ import { Clock, Eye, Send } from 'lucide-react'
 import ToolTip from './ui/tooltip'
 
 const PostPopup = ({closePopup}:{closePopup:React.Dispatch<React.SetStateAction<boolean>>}) => {
-  const {currentTweet, currentPostMedia, whenToPost,currentPostTime, publishingTweetToTwitter }= UseX();
+  const {currentTweet, currentPostMedia, whenToPost,currentPostTime, publishingTweetToTwitter, scheduleTweetToTwitter }= UseX();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const publishNow = async () => {
+    setLoading(true);
+    const response =await publishingTweetToTwitter();
+
+    if(response) {
+      closePopup(val => !val);
+    }
+    setLoading(false);
+
+  }
+
+  const scheduleTweet = async () => {
+    setLoading(true);
+    const response =await scheduleTweetToTwitter();
+
+    if(response) {
+      closePopup(val => !val);
+    }
+    setLoading(false);
+
+  }
 
   return (
     <Popup
@@ -57,9 +80,10 @@ className='text-customBlue mr-1'
         {whenToPost == "now"? (
            <Button 
            className='py-1'
+           loading={loading}
            startIcon={<Send />}
            variant='primary' 
-           onClick={publishingTweetToTwitter}
+           onClick={publishNow}
       
            >
              Post Now
@@ -70,8 +94,10 @@ className='text-customBlue mr-1'
         (
           <Button 
           className='py-1'
+          loading={loading}
           startIcon={<Clock />}
           variant='primary' 
+          onClick={scheduleTweet}
 
           >
             Schedule

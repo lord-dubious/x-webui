@@ -192,16 +192,38 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
 
     }
 
-    const logOutXAccount =  () => {
+    const logOutXAccount = async  () => {
 
-        console.log("Logged Out");
+  
         Cookies.remove("xAccessToken", { path: "/" });
         Cookies.remove("xRefreshToken", { path: "/" });
         setIsXIntegrated(false);
-        showNotification({
-            message:"Profile Disconnected Successfully",
-            type:"positive"
-        })
+
+        try {
+          const URL = `${domain}/api/v1/user/path/twitter/delete`;
+
+          const result = await axios.post(URL,{
+            twitterId:Xdata?.id
+          },{
+              withCredentials:true
+            });
+
+            showNotification({
+              message:result.data.message || "Twitter Account Disconnected",
+              type:"positive"
+          })
+
+        }catch(err) {
+          console.log(e);
+          showNotification({
+              //@ts-expect-error  because of message
+              message:e.response.data.message || "Internal Server Error",
+              type:"negative"
+            })
+            return false;
+
+        }
+
     }
 
     const getBots = async () => {

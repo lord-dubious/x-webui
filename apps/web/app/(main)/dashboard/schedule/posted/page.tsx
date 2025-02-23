@@ -81,7 +81,7 @@ const handlePageClick = (event:{selected:number}) => {
 
       {itemsToShow.length ===0 ? (
         <div className="">
-          There are no drafts post saved...
+          There are no published post...
         </div>
       ):(
 

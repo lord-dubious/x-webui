@@ -59,6 +59,9 @@ importers:
       list:
         specifier: ^2.0.19
         version: 2.0.19
+      moment:
+        specifier: ^2.30.1
+        version: 2.30.1
       node-cron:
         specifier: ^3.0.3
         version: 3.0.3
@@ -97,7 +100,7 @@ importers:
         version: 1.20.1
       uploadthing:
         specifier: ^7.4.4
-        version: 7.5.2(express@4.21.2)(next@15.1.7(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))
+        version: 7.5.2(express@4.21.2)(next@15.1.6(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@22.13.0)(typescript@5.7.3)))
       zod:
         specifier: ^3.24.1
         version: 3.24.2

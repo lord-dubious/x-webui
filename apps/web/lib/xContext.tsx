@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNotification } from "@/components/notification/notificationContext";
 import { useRouter } from "next/navigation";
 import type{Value} from "react-multi-date-picker"
+import { DateObject } from "react-multi-date-picker";
 import { UseAi } from "./aiContext";
 
 type xContextType = {
@@ -17,6 +18,7 @@ type xContextType = {
     createOrUpdateDraftPost:() => Promise<boolean>,
     fetchAllDrafts:() => Promise<boolean>,
     fetchAllPublished:() => Promise<boolean>,
+    fetchAllScheduled:() => Promise<boolean>,
     draftPosts:PostsType[]
     publishedPosts:PostsType[]
     scheduledPost:PostsType[]
@@ -27,7 +29,8 @@ type xContextType = {
     setCurrentPostTime:React.Dispatch<React.SetStateAction<Value>>
     moveToDraft:(id:string) => Promise<boolean>
     settinngAiTweet:(text:string) => void;
-    publishingTweetToTwitter:() => void;
+    publishingTweetToTwitter:() => Promise<boolean>;
+    scheduleTweetToTwitter:() => Promise<boolean>
 }
 
 export type FileType = {
@@ -165,11 +168,11 @@ export const XContextProvider = ({children}:{children:React.ReactNode}) => {
     const usingDraft = (id:string) => {
 
         const post = draftPosts.filter((post) => post.id == id)[0];
-        const postContent = post.postContent;
-        const mediaFiles = post.files
+        const postContent = post?.postContent;
+        const mediaFiles = post?.files
 
-        setCurrentTweet(postContent);
-        setCurrentPostMedia(mediaFiles);
+        setCurrentTweet(postContent || " ");
+        setCurrentPostMedia(mediaFiles || []);
         setCurrentPostId(id);
         router.push("/dashboard/publish/editor");
 
@@ -179,11 +182,11 @@ export const XContextProvider = ({children}:{children:React.ReactNode}) => {
     const usingScheduled = (id:string) => {
 
         const post = draftPosts.filter((post) => post.id == id)[0];
-        const postContent = post.postContent;
-        const mediaFiles = post.files
+        const postContent = post?.postContent;
+        const mediaFiles = post?.files
 
-        setCurrentTweet(postContent);
-        setCurrentPostMedia(mediaFiles);
+        setCurrentTweet(postContent || "");
+        setCurrentPostMedia(mediaFiles || []);
         setCurrentPostId(id);
         router.push("/dashboard/publish/editor");
 
@@ -254,18 +257,26 @@ export const XContextProvider = ({children}:{children:React.ReactNode}) => {
 
     const publishingTweetToTwitter = async() => {
         try {
-            const URL = `${domain}/api/v1/user/posts/publishposttotwitter`
+            const URL = `${domain}/api/v1/user/posts/publishposttotwitterwithoutmedia`
             
 
             const response = await axios.post(URL, {
                 tweetText:currentTweet,
                 id:Xdata?.id,
-                postMedia:currentPostMedia
+                postMedia:currentPostMedia,
+                currentPostId
             }, {
                 withCredentials:true
             })
-            console.log("reached here")
-            console.log(response.data)
+            showNotification({
+                message:response.data.message || "Post Published Successfully",
+                type:"positive"
+            })
+
+            setCurrentPostId(null);
+            setCurrentTweet("");
+            setCurrentPostMedia([]);
+            return true;
 
         } catch(err) {
             console.log(err);
@@ -273,6 +284,42 @@ export const XContextProvider = ({children}:{children:React.ReactNode}) => {
                 message:"Failed To Post Tweet",
                 type:"negative"
             })
+            return false;
+
+        }
+    }
+
+    const scheduleTweetToTwitter = async() => {
+        try {
+            const URL = `${domain}/api/v1/user/posts/scheduletweetwithoutmedia`
+        
+
+            const response = await axios.post(URL, {
+                tweetText:currentTweet,
+                id:Xdata?.id,
+                postMedia:currentPostMedia,
+                currentPostId,
+                schedulingTime:currentPostTime?.toString()
+            }, {
+                withCredentials:true
+            })
+
+            showNotification({
+                message:response.data.message || "Post Scheduled Successfully",
+                type:"positive"
+            })
+            setCurrentPostId(null);
+            setCurrentTweet("");
+            setCurrentPostMedia([]);
+            return true;
+
+        } catch(err) {
+            console.log(err);
+            showNotification({
+                message:"Failed To Post Tweet",
+                type:"negative"
+            })
+            return false;
 
         }
     }
@@ -283,7 +330,7 @@ export const XContextProvider = ({children}:{children:React.ReactNode}) => {
     }, [])
 
     return (
-        <XContext.Provider value={{currentTweet,setCurrentTweet, whenToPost, setWhenToPost, currentPostMedia, setCurrentPostMedia, createOrUpdateDraftPost, fetchAllDrafts, draftPosts, usingDraft, deleteDraft, setCurrentPostTime, currentPostTime, moveToDraft, usingScheduled, settinngAiTweet, publishedPosts, fetchAllPublished, publishingTweetToTwitter}} >
+        <XContext.Provider value={{currentTweet,setCurrentTweet, whenToPost, setWhenToPost, currentPostMedia, setCurrentPostMedia, createOrUpdateDraftPost, fetchAllDrafts, draftPosts, usingDraft, deleteDraft, setCurrentPostTime, currentPostTime, moveToDraft, usingScheduled, settinngAiTweet, publishedPosts, fetchAllPublished, publishingTweetToTwitter, scheduledPost, fetchAllScheduled, scheduleTweetToTwitter}} >
             {children}
         </XContext.Provider>
     )

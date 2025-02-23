@@ -31,7 +31,7 @@ const ListView = () => {
   const [selectedPost, setSelectedPost] = useState<PostsType |null>(null);
 
 
-    const {fetchAllDrafts,draftPosts } = UseX();
+    const {fetchAllScheduled,scheduledPost } = UseX();
      const [currentPage, setCurrentPage] = useState<number>(0);
      const itemsPerPage = 5;
 
@@ -41,15 +41,15 @@ const handlePageClick = (event:{selected:number}) => {
 
 }
 
-     const itemsToShow = draftPosts.slice(
+     const itemsToShow = scheduledPost.slice(
          currentPage *itemsPerPage,
          (currentPage+1)*itemsPerPage
      )
      
        const loadingDrafts = async () => {
          setLoading(true);
-         await fetchAllDrafts();
-         console.log(draftPosts);
+         await fetchAllScheduled();
+         console.log(scheduledPost);
          setLoading(false);
        }
      
@@ -157,10 +157,10 @@ Preview
       )}
 
         </div>
-        {draftPosts.length >0  &&(
+        {scheduledPost.length >0  &&(
             <ReactPaginate
             className="flex items-center justify-center space-x-2 text-sm font-medium mt-auto mb-8 "  
-            pageCount={Math.ceil(draftPosts.length / itemsPerPage)}
+            pageCount={Math.ceil(scheduledPost.length / itemsPerPage)}
             pageRangeDisplayed={5}
             marginPagesDisplayed={3}
             onPageChange={handlePageClick}

@@ -5,12 +5,14 @@ import googleIcon from "../assets/google-logo.svg"
 import Image from 'next/image'
 import { useRouter } from "next/navigation";
 import { useNotification } from './notification/notificationContext'
+import { useAuth } from '@/lib/authContext'
 
 
 const OrLoginWith = () => {
 
     const router = useRouter();
     const {showNotification}= useNotification();
+    const {getUserDetail} = useAuth();
 
 
 
@@ -29,6 +31,7 @@ const OrLoginWith = () => {
                         message:message,
                         type:"positive"
                     })
+                    getUserDetail();
                 }
                 else {
                     console.log("Error while login");

@@ -11,6 +11,7 @@ import contentRouter from "./routes/content";
 import postRouter from "./routes/posts";
 import mediaRouter from "./routes/media";
 import aiRouter from "./routes/ai";
+import "./utils/scheduler"
 
 const app= express();
 

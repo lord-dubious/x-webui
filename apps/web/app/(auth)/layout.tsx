@@ -6,7 +6,7 @@ import Footer from "@repo/ui/footer";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col  w-full min-h-screen">
+    <div className="flex flex-col  w-full min-h-screen !overflow-auto">
       <div className="flex justify-center items-center gap-1 py-2 h-32">
           <Image
             src={icon_v1_dark}

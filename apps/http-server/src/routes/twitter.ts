@@ -64,7 +64,7 @@ twitterRouter.get("/twitter/accountinfo", authMiddleware, async (req: Request, r
     const account = await prisma.twitter.findUnique({
         where:{
             userId
-        }
+        },
     })
 
 
@@ -95,5 +95,35 @@ catch(e) {
 }
 })
 
+twitterRouter.post("/twitter/delete", authMiddleware, async (req , res) => {
+
+    try {
+        //@ts-ignore
+        const userId = req.userId;
+        const id = req.body.twitterId;
+
+        console.log("Twitter Deletion")
+
+        const result = await prisma.twitter.delete({
+            where:{
+                userId,
+                id
+            }
+        })
+
+        res.status(200).json({
+            message:"Twitter Account Disconnected",
+            id:result.twitterId
+        })
+
+    }catch(err) {
+        console.log(err);
+        res.status(500).json({
+            message:"Internal Server Error",
+    
+        })
+    }
+
+})
 
 export default twitterRouter

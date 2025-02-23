@@ -17,11 +17,12 @@ const OnboardChecklist = () => {
 <div className=" mt-4 text-lg relative aspect-video" id="content">
 
   
-      <Iframe url="https://www.loom.com/embed/5bbdeb480ba84e65b1b3de8c190e2003?sid=b769f1a1-1c1d-4b39-a43b-cdbdccc90b60" 
+      <Iframe url="https://www.loom.com/embed/0275469139ed45338ae1882753affe47?sid=efc4315a-afba-4cd9-a4de-a8e21a16ff74" 
         id=""
         className="bg-white rounded-md absolue top-0 left-0 w-full h-full"
         display="block"
         position="relative" ></Iframe>
+
 </div>
 
 <div className="p-4 mt-4">

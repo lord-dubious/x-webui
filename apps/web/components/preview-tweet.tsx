@@ -54,7 +54,7 @@ const PreviewTweet = ({
 
       <div className="border p-4 rounded-md bg-white dark:bg-black flex gap-1 w-full">
         
-        <div className="w-[10%]" id="left">
+        <div className="w-[10%] max-w-12" id="left">
           {Xdata?.profilePicture ? (
             <Image
               src={Xdata?.profilePicture}

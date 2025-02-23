@@ -6,6 +6,7 @@ import { createRouteHandler } from "uploadthing/express";
 import { uploadRouter } from "./uploadthing";
 import axios from "axios";
 import { TwitterApi } from 'twitter-api-v2';
+import moment from "moment";
 
 const postRouter:Router = Router();
 
@@ -411,6 +412,146 @@ console.log("limitedMediaIds", limitedMediaIds);
 
         // }
    
+
+})
+
+postRouter.post("/publishposttotwitterwithoutmedia", async(req, res) => {
+
+    //@ts-ignore
+    const userId = req.userId;
+    const id = req.body.id;
+    const tweetText = req.body.tweetText;
+    const postId= req.body.currentPostId;
+
+
+    const twitterAccount = await prisma.twitter.findUnique({
+        where: { 
+            id,
+            userId
+         },
+      });
+
+      if(!twitterAccount) {
+        
+        res.status(404).json({
+            message:"Twitter Account Not Connected"
+        })
+        return;
+      }
+
+      const client = new TwitterApi({
+        appKey: process.env.TWITTER_CLIENT_ID as string,
+        appSecret: process.env.TWITTER_CLIENT_SECRET as string,
+        accessToken:twitterAccount.accessToken,
+        accessSecret:twitterAccount.refreshToken
+      })
+
+
+
+    try {
+        console.log("reached here")
+        const response = await client.v2.tweet(tweetText);
+        //resolve create or update post
+
+        let respo;
+        if(postId) {
+
+            respo = await prisma.post.update({
+                where:{
+                    id:postId
+                },
+                data:{
+                    status:"PUBLISHED",
+                    tweetId:response.data.id
+                }
+            })
+
+
+        }else {
+            respo = await prisma.post.create({
+                data:{
+                    postContent:tweetText,
+                    userId,
+                    status:"PUBLISHED",
+                    tweetId:response.data.id
+                }
+            })
+
+        }
+        
+
+        res.status(201).json({
+            message:"Tweet Published Successfully, Check the Posted Menu of Schedule Tab",
+            tweetId:respo.tweetId
+        })
+        
+
+    }catch(err) {
+        console.log(err);
+        res.status(501).json({
+            message:"Tweet Posting Failed "
+        })
+
+    }
+
+
+})
+
+postRouter.post("/scheduletweetwithoutmedia", async(req, res) => {
+
+    console.log("inside schedule")
+    //@ts-ignore
+    const userId = req.userId;
+    const tweetText = req.body.tweetText;
+    const postId= req.body.currentPostId;
+    console.log(req.body.schedulingTime);
+    const time = (req.body.schedulingTime);
+    const parsedDate = moment(time, "DD/MM/YYYY hh:mm A");
+    console.log(time);
+    console.log("this is time");
+    try {
+
+        let respo;
+        if(postId) {
+
+            respo = await prisma.post.update({
+                where:{
+                    id:postId
+                },
+                data:{
+                    status:"SCHEDULED",
+                    scheduledFor:parsedDate
+                }
+            })
+
+
+        }else {
+            respo = await prisma.post.create({
+                data:{
+                    postContent:tweetText,
+                    userId,
+                    status:"SCHEDULED",
+                    scheduledFor:parsedDate
+                }
+            })
+
+        }
+        
+
+        res.status(201).json({
+            message:"Tweet Scheduled Successfully",
+            tweetId:respo.tweetId
+        })
+        
+
+    }catch(err) {
+        console.log(err);
+        res.status(501).json({
+            message:"Tweet Posting Failed "
+        })
+
+    }
+
 
 })
 
