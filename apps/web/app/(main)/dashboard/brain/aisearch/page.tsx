@@ -17,7 +17,7 @@ const AiSearch = () => {
             className="w-full py-3 pl-4 pr-12 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-            <button type="submit" className="text-gray-500 hover:text-gray-700 focus:outline-none">
+            <button title='coming' type="submit" className="text-gray-500 hover:text-gray-700 focus:outline-none">
               <svg
                 className="w-5 h-5"
                 fill="none"

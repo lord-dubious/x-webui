@@ -1,17 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Github } from "lucide-react";
 
 export default function OpenSourceSection() {
 
-  useEffect(() => {
-    // Small delay for fade-in effect
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-  }, []);
+
 
   return (
     <section className="w-full py-16 bg-black overflow-hidden relative text-center">

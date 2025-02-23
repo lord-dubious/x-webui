@@ -3,7 +3,6 @@ import CardsMarquee from "@/components/cards";
 import FeaturesCarousel from "@/components/features-carousel";
 import HeroSection from "@/components/hero-sectioin";
 import NavBar from "@/components/navbar";
-import OpenSourceSection from "@/components/open-source";
 import Footer from "@repo/ui/footer"
 
 
