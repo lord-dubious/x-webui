@@ -3,7 +3,7 @@ import ToolTip from './ui/tooltip'
 import { UseX } from '@/lib/xContext'
 
 const PostsCount = () => {
-  const {draftPosts} = UseX();
+  const {draftPosts, publishedPosts} = UseX();
 
   return (
     <div className='border p-6 rounded-md min-h-72 relative h-full'>
@@ -29,7 +29,7 @@ const PostsCount = () => {
 
 
         <div className="mt-4" id=''>
-        <h2 className='text-6xl text-bold'>120</h2>
+        <h2 className='text-6xl text-bold'>{publishedPosts.length}</h2>
         <h3 className='mt-1 dark:text-gray-300  text-lg'>Published</h3>
         </div>
 
