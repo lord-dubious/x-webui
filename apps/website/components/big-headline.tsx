@@ -12,7 +12,7 @@ export default function BigHeadline() {
   }, []);
 
   return (
-    <section className="bg-customBl text-white pt-16 pb-24 px-6 md:px-12 lg:px-32">
+    <section className="bg-black text-white pt-16 pb-24 px-6 md:px-12 lg:px-32">
       <div className="mx-auto text-left max-w-5xl">
         <h1
           className={`text-5xl md:text-8xl font-light !leading-snug transform transition-all duration-1000  ${

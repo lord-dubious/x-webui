@@ -27,7 +27,7 @@ twitterRouter.get(
         res.send(`
             <script>
             window.opener.postMessage({
-            success:true, message:"X Integrated Successfully"
+            login:true, message:"X Integrated Successfully"
             }, '${MAIN_URL}')
             window.close();
 
@@ -54,18 +54,19 @@ twitterRouter.get(
 );
 
 
-twitterRouter.get("/twitter/accountinfo", async (req: Request, res: Response) => {
+twitterRouter.get("/twitter/accountinfo", authMiddleware, async (req: Request, res: Response) => {
 
     try {
 
-    //@ts-ignore
-    const userId = req.userID;
+        //@ts-ignore
+        const userId = req.userId;
 
-    const account = await prisma.twitter.findFirst({
+    const account = await prisma.twitter.findUnique({
         where:{
             userId
         }
     })
+
 
     if(!account) {
         res.status(404).json({

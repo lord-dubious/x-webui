@@ -1,8 +1,9 @@
-import BigHeadline from "@/components/BigHeadline";
-import CardsMarquee from "@/components/Cards";
-import FeaturesCarousel from "@/components/FeaturesCarousel";
-import HeroSection from "@/components/HeroSection";
-import NavBar from "@/components/NavBar";
+import BigHeadline from "@/components/big-headline";
+import CardsMarquee from "@/components/cards";
+import FeaturesCarousel from "@/components/features-carousel";
+import HeroSection from "@/components/hero-sectioin";
+import NavBar from "@/components/navbar";
+import OpenSourceSection from "@/components/open-source";
 import Footer from "@repo/ui/footer"
 
 
@@ -13,6 +14,7 @@ export default function Home() {
        <HeroSection />
        <FeaturesCarousel />
        <CardsMarquee />
+       {/* <OpenSourceSection /> */}
        <BigHeadline />
        <Footer />
      

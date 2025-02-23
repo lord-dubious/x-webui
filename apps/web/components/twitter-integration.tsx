@@ -23,6 +23,8 @@ const TwitterIntegration = () => {
       }
 
       const {login, message}= event.data || {}
+      console.log("login data")
+      console.log(event.data)
 
       if(login) {
         console.log("login success")
@@ -108,7 +110,6 @@ const TwitterIntegration = () => {
 
         }
 
-      
     </div>
   )
 }

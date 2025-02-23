@@ -4,12 +4,12 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-black w-full text-gray-300  py-8 border-t border-opacity-20 border-gray-50  flex justify-between items-center px-16 h-24">
+    <footer className="dark:bg-black bg-white w-full dark:text-gray-300  py-8 border-t border-opacity-20 border-gray-50  flex justify-between items-center px-16 h-24">
       
       <a href="https://tweetly.in" className="cursor-pointer ">
         <div className="flex items-center  mb-4 md:mb-0">
             
-          <img src="/dark-icon.png" alt="Tweetly Logo" className="h-12 w-[50px] cursor-pointer  brightness-0 dark:invert" />
+          <img src="/logo.jpg" alt="Tweetly Logo" className="h-12 w-[50px] cursor-pointer  brightness-0 dark:invert" />
           
           <span className="text-2xl font-bold dark:text-white ">Tweetly</span>
        
