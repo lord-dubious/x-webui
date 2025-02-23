@@ -16,6 +16,7 @@ type AuthContextType = {
     user:UserData | null
     passwordResetLinkSend:(data:forgotPasswordData) => Promise<boolean>
     passwordReset:(data:ResetPasswordData) => Promise<boolean | undefined>
+    getUserDetail:() => Promise<boolean>
 }
 type RegistrationData = {
   email: string;
@@ -360,7 +361,7 @@ const {showNotification} = useNotification();
   }
 
     return (
-        <AuthContext.Provider value={{login, logout, signUp,  isAuthenticated, otpVerfication, reSendOtp, user, passwordResetLinkSend, passwordReset}}>
+        <AuthContext.Provider value={{login, logout, signUp,  isAuthenticated, otpVerfication, reSendOtp, user, passwordResetLinkSend, passwordReset, getUserDetail}}>
             {children}
         </AuthContext.Provider>
     )
