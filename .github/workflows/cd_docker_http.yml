@@ -23,3 +23,14 @@ jobs:
                 file: ./docker/Dockerfile.http
                 push: true
                 tags: avishmadaan/tweetly-http:${{github.sha}}
+
+            - name: executing remote ssh commands
+              uses: appleboy/ssh-action@v1.2.0
+              with: 
+                  host: 134.209.156.16
+                  username: root
+                  key: ${{secrets.SSH_PRIVATE_KEY_DO}}
+                  port: 22
+                  script: |
+                      docker stop http
+                      docker run --name http --env-file .env  -d -p 3001:30001 avishmadaan/tweetly-website:${{github.sha}}
