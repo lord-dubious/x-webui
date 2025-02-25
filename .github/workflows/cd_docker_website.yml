@@ -36,4 +36,4 @@ jobs:
                 script: |
                     docker stop website 
                     docker rm website
-                    docker run --name website -d -p 3001:30001 avishmadaan/tweetly-website:${{github.sha}}
+                    docker run --name website -d -p 3001:3001 avishmadaan/tweetly-website:${{github.sha}}
