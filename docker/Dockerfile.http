@@ -6,6 +6,7 @@ COPY ./packages ./packages
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 COPY ./package.json ./package.json
 COPY ./turbo.json ./turbo.json
+COPY ./pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY ./apps/http-server ./apps/http-server
 
 RUN npm i -g pnpm
