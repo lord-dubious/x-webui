@@ -34,4 +34,4 @@ jobs:
                   script: |
                       docker stop http
                       docker rm http
-                      docker run --name http --env-file .env  -d -p 3001:30001 avishmadaan/tweetly-website:${{github.sha}}
+                      docker run --name http --env-file .env  -d -p 3001:30001 avishmadaan/tweetly-http:${{github.sha}}

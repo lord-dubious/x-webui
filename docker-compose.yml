@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo
+    ports: 
+      - 5432:5432
+    
+  web-app:
+    build:
+      network: host
+      context: ./
+      dockerfile: ./docker/Dockerfile.http
+    
+    ports:
+      - 3000:3000
+
+    depends_on:
+      - mongo
+
+  
+  
