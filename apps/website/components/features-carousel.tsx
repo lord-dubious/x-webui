@@ -7,27 +7,27 @@ const featuresData = [
   {
     title: "Brain",
     description: "A dedicated space to save all your tweets.",
-    image: "/Brain1.jpg",
+    image: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUexNiNtFGZ8ejuvhlPcoHR2rBdUbzs9iMw4Kg",
   },
   {
     title: "Bots",
     description: "AI bots trained to write your tweets for you.",
-    image: "/Bots1.jpg",
+    image: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUZpbJCmEc47LUgHpo5GeIyu2XbMa1RxwZqdEi",
   },
   {
     title: "Chats",
     description: "Engage in interactive chats with intelligent bots.",
-    image: "/Chat1.jpg",
+    image: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUDyZNS7eoKceE4txni7wkXlqFapgHb6GCu9vA",
   },
   {
     title: "Publish",
     description: "Effortlessly publish your tweets with Tweetly.",
-    image: "/Publish1.jpg",
+    image: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHURjglvcSNVjtTDCBbn20Khu9IUcSZM3LXzOiR",
   },
   {
     title: "Schedule",
     description: "Schedule and edit tweets seamlessly.",
-    image: "/Schedule1.jpg",
+    image: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUx5Vls9DFuHyEDPQ4rWRs12eht5xmb0VcYBqk",
   },
 ];
 
