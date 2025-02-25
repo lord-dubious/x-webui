@@ -33,4 +33,5 @@ jobs:
                     port: 22
                     script: |
                         docker stop web
+                        docker rm web
                         docker run --name web --env-file .env.web  -d -p 3000:30000 avishmadaan/tweetly-website:${{github.sha}}
