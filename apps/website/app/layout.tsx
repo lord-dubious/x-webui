@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Tweetly is the ultimate SaaS platform for developers to boost their Twitter/X presence. Schedule tweets, train AI to match your style, automate engagement, and grow your audience authentically and efficiently. Built by a developer for developers.",
   icons: {
-    icon: "/logo.jpg"
+    icon: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUQjQF1sv1N097MgFkwydKY3rmbRif5EsltJ6Q"
   },
 };
 
