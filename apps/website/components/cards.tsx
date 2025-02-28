@@ -36,15 +36,16 @@ const bots = [
 
 export default function BotsMarquee() {
   return (
-    <section className="w-full py-16 bg-black overflow-hidden relative text-center">
+  
+    <section className="w-full py-16  pb-32 overflow-hidden relative text-center">
       <div className="absolute inset-0 pointer-events-none" />
 
       {/* Headline */}
       <div className="mb-24">
         <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">
-          🚀 Meet the Pros Who Tweet Smart
+          Meet the Pros Who <span className="bg-customBlue p-2 rounded-md">Tweet Smart </span> 
         </h2>
-        <p className="text-lg md:text-xl text-gray-300 mt-2">
+        <p className="text-lg md:text-xl text-gray-300 mt-4">
         Need inspiration? Stuck on wording? These AI-powered bots help you craft engaging tweets in seconds.
         </p>
       </div>
@@ -54,9 +55,9 @@ export default function BotsMarquee() {
         {bots.concat(bots).map((bot, idx) => (
           <div
             key={idx}
-            className="inline-block mx-4 text-center text-white min-w-[250px] transition-transform duration-300 hover:scale-105"
+            className="inline-block mx-4 text-center text-white min-w-[250px] transition-transform duration-300 hover:scale-105 bg-gray-950  pb-3 rounded-md"
           >
-            <div className="w-24 h-24 relative mx-auto mb-4">
+            <div className="w-24 h-24 relative mx-auto mb-4 -mt-6">
               <Image
                 src={bot.imageURL}
                 alt={bot.name}
@@ -65,7 +66,7 @@ export default function BotsMarquee() {
               />
             </div>
             <h3 className="text-xl font-bold mb-1">{bot.name}</h3>
-            <p className="text-sm mb-3">{bot.tag}</p>
+            <p className="text-xs mb-3">{bot.tag}</p>
             <a
               href={bot.twitterLink}
               target="_self"

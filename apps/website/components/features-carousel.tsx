@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@repo/ui/button";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -59,7 +60,7 @@ export default function FeaturesCarousel() {
               alt={currentFeature?.title}
               width={800}
               height={800}
-              className="w-full rounded-2xl shadow-md shadow-gray-50 transition-transform duration-500 ease-out transform hover:scale-105"
+              className="w-full rounded-2xl shadow-md transition-transform duration-500 ease-out transform hover:scale-105 cursor-pointer"
             />
             )}
             
@@ -72,7 +73,8 @@ export default function FeaturesCarousel() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {featuresData.map((feature, idx) => (
-              <button
+              <Button
+              variant="primary"
                 key={idx}
                 onClick={() => handleFeatureClick(idx)}
                 className={`px-4 py-2 rounded-full text-sm transition ${
@@ -82,7 +84,7 @@ export default function FeaturesCarousel() {
                 }`}
               >
                 {feature.title}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

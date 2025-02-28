@@ -1,41 +1,44 @@
 "use client";
 
+import { Sparkles } from "lucide-react";
+import { GridBackgroundDemo } from "./grid-background";
+import { Button } from "@repo/ui/button";
+import Badge from "./ui/badge";
+import Link from "next/link";
 import { ReactTyped } from "react-typed";
-import { Code, Sparkles } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="bg-black text-white pt-20 pb-0 px-4">
-      <div className="max-w-4xl mx-auto text-center">
-        <p className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1 rounded-full bg-gray-800">
-          <Code size={20} className="text-customBlue animate-pulse" />
-          <span className="text-lg tracking-wide">Crafted by Devs for Devs</span>
-        </p>
-        <h1 className="text-6xl md:text-7xl font-extrabold mb-8 leading-tight mt-2">
-          <ReactTyped
-            strings={[
-              "⏰ Too busy coding? Let Tweetly tweet for you!",
-              "🤔 Unsure what to tweet? Spark your creativity with Tweetly!",
-              "🚀 Elevate your Twitter game – schedule a month of tweets in minutes!"
-            ]}
-            typeSpeed={80}
-            backSpeed={40}
-            loop
-          />
-        </h1>
-        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-        Boost your dev vibe—Tweetly’s AI writes and schedules tweets in minutes, so you can code and shine on Twitter.
-        </p>
-        <a
-          href="https://app.tweetly.in"
-          target="_self"
-          rel="noopener noreferrer"
-          className="inline-flex items-center bg-customBlue  px-6 py-3 rounded-md text-base font-medium transition"
-        >
-          <Sparkles size={18} className="mr-2 animate-bounce" />
-          Try Tweetly
-        </a>
-      </div>
-    </section>
+    <GridBackgroundDemo>
+      <section className="text-white pt-20 pb-0 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <Badge />
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            Tweetly helps you write & schedule tweets{" "}  with AI Personalities that{" "}
+            <span className="text-customBlue">
+             
+              <ReactTyped
+                strings={["inspire", "engage", "elevate"]}
+                typeSpeed={80}
+                backSpeed={40}
+                loop
+              />
+            </span>
+          </h1>
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+            Boost your dev vibe—Tweetly’s AI writes and schedules tweets in minutes, so you can code and shine on Twitter.
+          </p>
+          <Link href="https://app.tweetly.in/">
+            <Button
+              startIcon={<Sparkles size={18} className="animate-bounce" />}
+              variant="secondary"
+              className="p-2 text-lg mx-auto !bg-customBlue !text-white"
+            >
+              Try Tweetly
+            </Button>
+          </Link>
+        </div>
+      </section>
+    </GridBackgroundDemo>
   );
 }
