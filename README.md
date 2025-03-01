@@ -1,58 +1,71 @@
-# Turborepo Tailwind CSS starter
+  ![Homepage](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUQjQF1sv1N097MgFkwydKY3rmbRif5EsltJ6Q)
 
-This Turborepo starter is maintained by the Turborepo core team.
+# Tweetly
 
-## Using this example
+**Tweetly** is a developer-focused platform that uses AI-powered bots to help you write, schedule, and publish tweets effortlessly. Built on a Turbo Repo architecture with Next.js on the frontend and an Express backend.
 
-Run the following command:
+## Table of Contents
 
-```sh
-npx create-turbo@latest -e with-tailwind
-```
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Installation (Docker)](#Installation (Docker))
+- [License](#license)
 
-## What's inside?
+## Features
 
-This Turborepo includes the following packages/apps:
+- **AI-Powered Tweet Composer:** Automatically generate engaging tweets with tailored AI personalities.
+- **Multiple AI Bots:** Choose from bots like Harkirt Singh, Striver Aka Raj, Code With Harry, and EzSnippet to match your dev vibe.
+- **Turbo Repo Architecture:** Efficient monorepo structure for streamlined development across frontend (Next.js) and backend (Express).
+- **Scheduling & Publishing:** Easily schedule tweets for timely posting.
+- **Developer-Centric Design:** Built with features and UX enhancements that resonate with developers.
 
-### Apps and Packages
+## Screenshots
 
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Here are some sample screenshots to showcase the UI:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **Tweetly Brain:**  
+  ![Brain](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUexNiNtFGZ8ejuvhlPcoHR2rBdUbzs9iMw4Kg)
+- **Bots:**  
+  ![Bots](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUZpbJCmEc47LUgHpo5GeIyu2XbMa1RxwZqdEi)
+- **Chats:**  
+  ![Chats](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUDyZNS7eoKceE4txni7wkXlqFapgHb6GCu9vA)
+- **Publish:**  
+  ![Publish](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHURjglvcSNVjtTDCBbn20Khu9IUcSZM3LXzOiR)
+- **Schedule:**  
+  ![Schedule](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUx5Vls9DFuHyEDPQ4rWRs12eht5xmb0VcYBqk)
 
-### Building packages/ui
 
-This example is set up to produce compiled styles for `ui` components into the `dist` directory. The component `.tsx` files are consumed by the Next.js apps directly using `transpilePackages` in `next.config.js`. This was chosen for several reasons:
+## Installation (Docker)
 
-- Make sharing one `tailwind.config.js` to apps and packages as easy as possible.
-- Make package compilation simple by only depending on the Next.js Compiler and `tailwindcss`.
-- Ensure Tailwind classes do not overwrite each other. The `ui` package uses a `ui-` prefix for it's classes.
-- Maintain clear package export boundaries.
+This section explains how to build and run Tweetly using Docker.
 
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update the `tailwind.config.js` in your apps to be aware of your package locations, so it can find all usages of the `tailwindcss` class names for CSS compilation.
+### Prerequisites
 
-For example, in [tailwind.config.js](packages/tailwind-config/tailwind.config.js):
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
-```
+### Build and Run with Docker Compose
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer` dependencies from the `ui` package.
+1. **Clone the Repository:**
 
-### Utilities
+   ```bash
+   git clone https://github.com/yourusername/tweetly.git
+   cd tweetly
 
-This Turborepo has some additional tools already setup for you:
+2. **Copy the .env.example file**
+   ```bash
+   cp .env.example .env
+   
+3. **Run Docker Compose Commad**
+    ```bash
+    docker-compose up
+4. **Access the Application**
+  Open your browser and navigate to 
+  http://localhost:3000 : Web App
+  http://localhost:4000 : Backend
+  http://localhost:3001 : Website
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## License
+
+Tweetly is licensed under the **MIT License**.
+
