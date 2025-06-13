@@ -10,7 +10,6 @@
 
     "db:generate":"cd packages/db && npx  prisma generate",
     "start":"cd apps/http-server && pnpm run start",
-    "start:combined":"cd apps/http-server && pnpm run start",
     "build:combined":"cd apps/http-server && pnpm run build",
     "dev:combined":"cd apps/http-server && pnpm run dev",
     "start:website":"cd apps/website && pnpm run start"

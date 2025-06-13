@@ -1,6 +1,6 @@
 # OpenAI-Compatible API Support
 
-This application now supports custom OpenAI-compatible endpoints with dynamic model fetching. You can use any OpenAI-compatible API provider including local models, other cloud providers, or custom endpoints.
+This application now supports custom OpenAI-compatible endpoints with dynamic model fetching. You can use any OpenAI-compatible API provider, including local models, other cloud providers, or custom endpoints.
 
 ## Features
 

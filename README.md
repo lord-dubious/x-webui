@@ -49,8 +49,8 @@ Tweetly now runs as a combined application on a single port for easier deploymen
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/tweetly.git
-   cd tweetly
+   git clone https://github.com/lord-dubious/x-webui.git
+   cd x-webui
    ```
 
 2. **Install Dependencies:**

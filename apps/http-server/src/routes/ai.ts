@@ -195,20 +195,27 @@ aiRouter.post("/models", async(req, res) => {
 
         const models = response.data.data || [];
 
-        // Separate LLM and embedding models
-        const llmModels = models.filter((model: any) =>
-            model.id.includes('gpt') ||
-            model.id.includes('claude') ||
-            model.id.includes('llama') ||
-            model.id.includes('mistral') ||
-            model.id.includes('gemini') ||
-            !model.id.includes('embedding')
-        );
-
+        // Separate embedding models first (more specific)
         const embeddingModels = models.filter((model: any) =>
             model.id.includes('embedding') ||
             model.id.includes('embed')
         );
+
+        // Then filter LLM models (exclude embedding models and include known LLM patterns)
+        const llmModels = models.filter((model: any) => {
+            const isEmbedding = model.id.includes('embedding') || model.id.includes('embed');
+            const isKnownLLM = model.id.includes('gpt') ||
+                              model.id.includes('claude') ||
+                              model.id.includes('llama') ||
+                              model.id.includes('mistral') ||
+                              model.id.includes('gemini') ||
+                              model.id.includes('chat') ||
+                              model.id.includes('instruct');
+
+            // Include if it's a known LLM pattern and not an embedding model
+            // Or if it's not an embedding model and doesn't look like a specialized model
+            return !isEmbedding && (isKnownLLM || (!model.id.includes('whisper') && !model.id.includes('tts')));
+        });
 
         res.status(200).json({
             message: "Models fetched successfully",

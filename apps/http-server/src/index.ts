@@ -15,6 +15,7 @@ import "./utils/scheduler"
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { spawn } from 'child_process';
 import path from "path";
+import http from 'http';
 
 const app = express();
 
@@ -68,6 +69,35 @@ const startNextServer = () => {
     nextProcess.on('close', (code: number) => {
         console.log(`[Next.js] Process exited with code ${code}`);
     });
+
+    nextProcess.on('error', (error: Error) => {
+        console.error(`[Next.js] Failed to start process:`, error);
+    });
+};
+
+const waitForNextJsReady = async (url: string, timeoutMs: number = 15000, intervalMs: number = 300): Promise<void> => {
+    const start = Date.now();
+    return new Promise<void>((resolve, reject) => {
+        const check = () => {
+            http.get(url, (res) => {
+                if (res.statusCode && res.statusCode < 500) {
+                    resolve();
+                } else {
+                    retry();
+                }
+            }).on('error', retry);
+        };
+
+        const retry = () => {
+            if (Date.now() - start > timeoutMs) {
+                reject(new Error('Next.js server did not become ready in time'));
+            } else {
+                setTimeout(check, intervalMs);
+            }
+        };
+
+        check();
+    });
 };
 
 // Proxy all non-API requests to Next.js server
@@ -91,8 +121,7 @@ const nextProxy = createProxyMiddleware({
                             <div style="text-align: center;">
                                 <h1>Tweetly</h1>
                                 <p>Starting up... Please wait a moment and refresh.</p>
-                                <p>If this persists, make sure to build the application first:</p>
-                                <code>pnpm run build:combined</code>
+                                <p>If this persists, please contact support.</p>
                             </div>
                         </div>
                     </body>
@@ -115,32 +144,33 @@ app.use('/api/*', (req, res) => {
     res.status(404).json({ message: "API route not found" });
 });
 
+// Cleanup function to avoid duplication
+const shutdown = () => {
+    console.log('\n🛑 Shutting down servers...');
+    if (nextProcess) {
+        nextProcess.kill();
+    }
+    process.exit(0);
+};
+
 // Start Next.js server and then start Express
 startNextServer();
 
-// Give Next.js a moment to start before starting Express
-setTimeout(() => {
-    app.listen(PORT, () => {
-        console.log(`🚀 Combined server running on port ${PORT}`);
-        console.log(`📱 Web app available at http://localhost:${PORT}`);
-        console.log(`🔗 API endpoints available at http://localhost:${PORT}/api/v1/`);
-        console.log(`⚡ Next.js server running internally on port 3000`);
+// Wait for Next.js to be ready before starting Express
+waitForNextJsReady('http://localhost:3000/')
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`🚀 Combined server running on port ${PORT}`);
+            console.log(`📱 Web app available at http://localhost:${PORT}`);
+            console.log(`🔗 API endpoints available at http://localhost:${PORT}/api/v1/`);
+            console.log(`⚡ Next.js server running internally on port 3000`);
+        });
+    })
+    .catch((err) => {
+        console.error('Failed to start Express because Next.js did not become ready:', err);
+        process.exit(1);
     });
-}, 2000);
 
 // Cleanup on exit
-process.on('SIGINT', () => {
-    console.log('\n🛑 Shutting down servers...');
-    if (nextProcess) {
-        nextProcess.kill();
-    }
-    process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-    console.log('\n🛑 Shutting down servers...');
-    if (nextProcess) {
-        nextProcess.kill();
-    }
-    process.exit(0);
-});
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

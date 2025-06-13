@@ -291,8 +291,8 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
     } catch(err){
       console.log(err);
       showNotification({
-        //@ts-expect-error  because of message
-        message:e.response.data.message || "Internal Server Error",
+        //@ts-expect-error because of message
+        message: (err as any).response?.data?.message || "Internal Server Error",
         type:"negative"
       })
 

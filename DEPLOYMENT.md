@@ -97,7 +97,7 @@ All API endpoints are available at `/api/v1/` on the same port as the frontend:
 
 ## Deployment Notes
 
-1. The frontend is built as static files and served by the Express server
+1. The Express server proxies requests to an internal Next.js server, which serves the built frontend
 2. No separate frontend server is needed
 3. All API calls use relative paths
 4. CORS is configured for the same origin
