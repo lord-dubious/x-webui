@@ -43,6 +43,7 @@ model User {
   post     Post[]
   category Category[]
   file    File[]
+  openaiConfig OpenAIConfig?
 
   @@map("users")
 }
@@ -170,6 +171,23 @@ model BotTweet {
 enum FileType {
   IMAGE
   VIDEO
+}
+
+model OpenAIConfig {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  apiKey String
+  baseUrl String @default("https://api.openai.com/v1")
+  llmModel String @default("gpt-4")
+  embeddingModel String @default("text-embedding-3-small")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @db.ObjectId @unique
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("openai_configs")
 }
 
 enum PostStatus {

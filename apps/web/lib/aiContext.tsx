@@ -10,7 +10,7 @@ import OpenAI from "openai";
 
 
 type AiContextType = {
-    checkValidAPI: (key:string) => Promise<boolean>;
+    checkValidAPI: (key:string, baseUrl?:string) => Promise<boolean>;
     isKeyAuthenticated:boolean;
     removeApiKey:() => void;
     openAiKey:string;
@@ -28,6 +28,14 @@ type AiContextType = {
     setChats: React.Dispatch<React.SetStateAction<Message[]>>
     tIChats:Message[]
     setTIChats:React.Dispatch<React.SetStateAction<Message[]>>
+    // New OpenAI configuration methods
+    openAiConfig: OpenAIConfig;
+    setOpenAiConfig: React.Dispatch<React.SetStateAction<OpenAIConfig>>;
+    availableModels: { llm: OpenAIModel[], embedding: OpenAIModel[] };
+    setAvailableModels: React.Dispatch<React.SetStateAction<{ llm: OpenAIModel[], embedding: OpenAIModel[] }>>;
+    fetchModels: (apiKey: string, baseUrl?: string) => Promise<boolean>;
+    saveOpenAiConfig: (config: OpenAIConfig & { apiKey: string }) => Promise<boolean>;
+    loadOpenAiConfig: () => Promise<void>;
 }
 
 type Xdata = {
@@ -59,6 +67,19 @@ export type Bot = {
     content:string;
   }
 
+  export interface OpenAIConfig {
+    baseUrl: string;
+    llmModel: string;
+    embeddingModel: string;
+  }
+
+  export interface OpenAIModel {
+    id: string;
+    object: string;
+    created?: number;
+    owned_by?: string;
+  }
+
 const AiContext =  createContext<AiContextType | undefined> (undefined);
 
 
@@ -75,6 +96,17 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
     const [aiBots, setAiBots] = useState<AiBot[]>([]);
      const [chats, setChats] = useState<Message[]>([]);
      const [tIChats, setTIChats] = useState<Message[]>([]);
+
+    // New OpenAI configuration state
+    const [openAiConfig, setOpenAiConfig] = useState<OpenAIConfig>({
+        baseUrl: "https://api.openai.com/v1",
+        llmModel: "gpt-4",
+        embeddingModel: "text-embedding-3-small"
+    });
+    const [availableModels, setAvailableModels] = useState<{ llm: OpenAIModel[], embedding: OpenAIModel[] }>({
+        llm: [],
+        embedding: []
+    });
     
 
     useEffect(() => {
@@ -90,25 +122,26 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
 
             const openAiAuth = localStorage.getItem("openAiAuth");
             if(openAiAuth) {
-            
+
                     setIsKeyAuthenticated(true);
                     setOpenAiKey(openAiAuth);
-    
+
             }
         }
 
 
         checkIfApiKeyValidOnStart();
         getBots();
+        loadOpenAiConfig();
 
 
     },[])
 
 
-    const checkValidAPI = async (key:string) => {
+    const checkValidAPI = async (key:string, baseUrl?: string) => {
 
         try {
-            const URL = `https://api.openai.com/v1/models`;
+            const URL = `${baseUrl || openAiConfig.baseUrl}/models`;
 
             await axios.get(URL, {
                 headers:{
@@ -116,7 +149,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
                 }
             })
 
-            
+
 
               setIsKeyAuthenticated(true);
               return true;
@@ -126,7 +159,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
         catch(e) {
             console.log(e)
             showNotification({
-                message:"API key is invalid",
+                message:"API key is invalid or base URL is incorrect",
                 type:"negative"
               })
               return false;
@@ -270,6 +303,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
   }
   const openai = new OpenAI({
     apiKey:openAiKey,
+    baseURL: openAiConfig.baseUrl,
     dangerouslyAllowBrowser:true
   })
 
@@ -323,13 +357,13 @@ If the provided context lacks sufficient details for the request, rely on your p
 `
       };
       const requestBody = {
-        model:"gpt-4",
+        model: openAiConfig.llmModel,
         messages:[systemMessage, ...chatHistory],
         stream:true
       }
       try {
 
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        const response = await fetch(`${openAiConfig.baseUrl}/chat/completions`, {
           method:"POST",
           headers:{
             "Content-Type":"application/json",
@@ -406,7 +440,7 @@ If the provided context lacks sufficient details for the request, rely on your p
     let embeddingVector:number[] =[];
     try {
       const embeddingResponse = await openai.embeddings.create({
-        model: "text-embedding-3-small",
+        model: openAiConfig.embeddingModel,
         input: message,
         encoding_format: "float",
       });
@@ -417,13 +451,117 @@ If the provided context lacks sufficient details for the request, rely on your p
       console.error("Error getting embedding:", err);
       showNotification({ message: "Error getting embedding", type: "negative" });
       return [];
-      
-    } 
+
+    }
   }
+
+  // New methods for OpenAI configuration
+  const fetchModels = async (apiKey: string, baseUrl?: string): Promise<boolean> => {
+    try {
+      const URL = `${domain}/api/v1/user/ai/models`;
+      const result = await axios.post(URL, {
+        apiKey,
+        baseUrl: baseUrl || openAiConfig.baseUrl
+      }, {
+        withCredentials: true
+      });
+
+      setAvailableModels({
+        llm: result.data.models.llm || [],
+        embedding: result.data.models.embedding || []
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      showNotification({
+        //@ts-expect-error because of message
+        message: err.response?.data?.message || "Failed to fetch models",
+        type: "negative"
+      });
+      return false;
+    }
+  };
+
+  const saveOpenAiConfig = async (config: OpenAIConfig & { apiKey: string }): Promise<boolean> => {
+    try {
+      const URL = `${domain}/api/v1/user/ai/config`;
+      const result = await axios.post(URL, config, {
+        withCredentials: true
+      });
+
+      setOpenAiConfig({
+        baseUrl: config.baseUrl,
+        llmModel: config.llmModel,
+        embeddingModel: config.embeddingModel
+      });
+
+      localStorage.setItem("openAiAuth", config.apiKey);
+      setOpenAiKey(config.apiKey);
+      setIsKeyAuthenticated(true);
+
+      showNotification({
+        message: "OpenAI configuration saved successfully",
+        type: "positive"
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      showNotification({
+        //@ts-expect-error because of message
+        message: err.response?.data?.message || "Failed to save configuration",
+        type: "negative"
+      });
+      return false;
+    }
+  };
+
+  const loadOpenAiConfig = async (): Promise<void> => {
+    try {
+      const URL = `${domain}/api/v1/user/ai/config`;
+      const result = await axios.get(URL, {
+        withCredentials: true
+      });
+
+      if (result.data.config) {
+        setOpenAiConfig(result.data.config);
+      }
+    } catch (err) {
+      console.log("No saved OpenAI configuration found");
+    }
+  };
 
 
     return (
-        <AiContext.Provider value={{checkValidAPI, isKeyAuthenticated, removeApiKey, openAiKey, integrateX, getXDetails, Xdata, isXIntegrated, logOutXAccount, setSelectedBot,selectedBot, aiBots, getAssistantReply, chats, setChats, setTIChats, tIChats, setOpenAiKey}} >
+        <AiContext.Provider value={{
+            checkValidAPI,
+            isKeyAuthenticated,
+            removeApiKey,
+            openAiKey,
+            integrateX,
+            getXDetails,
+            Xdata,
+            isXIntegrated,
+            logOutXAccount,
+            setSelectedBot,
+            selectedBot,
+            aiBots,
+            getAssistantReply,
+            chats,
+            setChats,
+            setTIChats,
+            tIChats,
+            setOpenAiKey,
+            // New OpenAI configuration values
+            openAiConfig,
+            setOpenAiConfig,
+            availableModels,
+            setAvailableModels,
+            fetchModels,
+            saveOpenAiConfig,
+            loadOpenAiConfig
+        }} >
             {children}
         </AiContext.Provider>
     )
