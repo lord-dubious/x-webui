@@ -9952,11 +9952,16 @@ const setBots = async () => {
 
 
 }
-const openai = new OpenAI({apiKey:process.env.OPENAI_API_KEY});
+// Note: This uses default OpenAI configuration for seeding purposes only
+// In production, users will configure their own OpenAI-compatible endpoints
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: process.env.OPENAI_BASE_URL || "https://api.openai.com/v1"
+});
 
 const getEmbedding = async (text:string) => {
     const embedding = await openai.embeddings.create({
-        model:"text-embedding-3-small",
+        model: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small",
         input:text
     })
     return embedding.data[0]?.embedding;
