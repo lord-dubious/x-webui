@@ -8,7 +8,7 @@
 
 - [Features](#features)
 - [Screenshots](#screenshots)
-- [Installation (Docker)](#Installation (Docker))
+- [Installation](#installation)
 - [License](#license)
 
 ## Features
@@ -35,35 +35,62 @@ Here are some sample screenshots to showcase the UI:
   ![Schedule](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUx5Vls9DFuHyEDPQ4rWRs12eht5xmb0VcYBqk)
 
 
-## Installation (Docker)
+## Installation
 
-This section explains how to build and run Tweetly using Docker.
+Tweetly now runs as a combined application on a single port for easier deployment.
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [pnpm](https://pnpm.io/) package manager
+- [MongoDB](https://www.mongodb.com/) database
 
-### Build and Run with Docker Compose
+### Quick Start
 
 1. **Clone the Repository:**
-
    ```bash
    git clone https://github.com/yourusername/tweetly.git
    cd tweetly
+   ```
 
-2. **Copy the .env.example file**
+2. **Install Dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+3. **Setup Environment:**
    ```bash
    cp .env.example .env
-   
-3. **Run Docker Compose Commad**
-    ```bash
-    docker-compose up
-4. **Access the Application**
-  Open your browser and navigate to 
-  http://localhost:3000 : Web App
-  http://localhost:4000 : Backend
-  http://localhost:3001 : Website
+   # Edit .env with your configuration
+   ```
+
+4. **Generate Database Schema:**
+   ```bash
+   pnpm run db:generate
+   ```
+
+5. **Build the Application:**
+   ```bash
+   pnpm run build:combined
+   ```
+
+6. **Start the Application:**
+   ```bash
+   pnpm run start
+   ```
+
+7. **Access the Application:**
+   - **Combined App:** http://localhost:4000 (Web App + API)
+   - **Marketing Website:** http://localhost:3001 (separate)
+
+### Development Mode
+
+For development with hot reloading:
+```bash
+pnpm run dev:combined
+```
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 ## License
 

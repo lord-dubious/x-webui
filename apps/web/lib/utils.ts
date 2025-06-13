@@ -5,4 +5,5 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const domain =process.env.NEXT_PUBLIC_DOMAIN
+// Use relative path for API calls since frontend and backend are on the same port
+export const domain = process.env.NEXT_PUBLIC_DOMAIN || ""
