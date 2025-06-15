@@ -10,12 +10,12 @@ import QuickActions from './quick-actions'
 import { useNotification } from './notification/notificationContext'
 import { UseX } from '@/lib/xContext'
 
-const TweetlyIntelligencePopup = (
+const XTaskIntelligencePopup = (
   { className, closePopup, children}:{
     children?:React.ReactNode,
     className?:string,
     closePopup:React.Dispatch<React.SetStateAction<boolean>>,
-  
+
   }
 ) => {
 
@@ -89,8 +89,8 @@ const TweetlyIntelligencePopup = (
 className='text-customBlue mr-1'
 
 />
-<h1 className="text-2xl font-semibold">Tweetly Intelligence</h1>
-<ToolTip>This section provides you with AI tools that comes with tweetly intelligence.</ToolTip>
+<h1 className="text-2xl font-semibold">XTask Intelligence</h1>
+<ToolTip>This section provides you with AI tools that comes with XTask intelligence.</ToolTip>
 
 </div>
 
@@ -212,4 +212,4 @@ onClick={handleUseIt}
   )
 }
 
-export default TweetlyIntelligencePopup
+export default XTaskIntelligencePopup

@@ -8,9 +8,9 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row justify-between items-center border-b pb-6">
         {/* Logo and Description */}
         <div className="text-center md:text-left mb-4 md:mb-0">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Tweetly</h3>
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">XTask</h3>
           <p className="mt-1 text-xs max-w-xs">
-            Your trusted platform for seamless social media interactions. Connect, engage, and grow with ease.
+            AI-powered Twitter growth for developers. Schedule tweets, train AI, and grow your audience authentically.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ const Footer = () => {
 
       {/* Social Media Links */}
       <div className="flex justify-center md:justify-between items-center mt-6">
-        <p className="text-xs">&copy; {new Date().getFullYear()} Tweetly. All Rights Reserved.</p>
+        <p className="text-xs">&copy; {new Date().getFullYear()} XTask. All Rights Reserved.</p>
         <div className="flex gap-4">
           <Link href="https://facebook.com" target="_blank" className="hover:underline">
             Facebook
