@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             width={50}
             height={50}
           />
-          <h1 className="text-4xl font-bold cursor-pointer">XTask</h1>
+          <h1 className="text-4xl font-bold cursor-pointer">Tweetly</h1>
         </div>
 <div className="flex-grow pb-12 flex justify-center">
       {children}

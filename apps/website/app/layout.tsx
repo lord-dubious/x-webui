@@ -14,9 +14,9 @@ const geistCode = Geist({
 
 // Metadata
 export const metadata: Metadata = {
-  title: "XTask - AI-Powered Twitter Growth for Developers",
+  title: "Tweetly - AI-Powered Twitter Growth for Developers",
   description:
-    "XTask is the ultimate SaaS platform for developers to boost their Twitter/X presence. Schedule tweets, train AI to match your style, automate engagement, and grow your audience authentically and efficiently. Built by a developer for developers.",
+    "Tweetly is the ultimate SaaS platform for developers to boost their Twitter/X presence. Schedule tweets, train AI to match your style, automate engagement, and grow your audience authentically and efficiently. Built by a developer for developers.",
   icons: {
     icon: "https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUQjQF1sv1N097MgFkwydKY3rmbRif5EsltJ6Q"
   },

@@ -10,13 +10,11 @@ import OpenAI from "openai";
 
 
 type AiContextType = {
-    checkValidAPI: (key:string, baseUrl?:string, provider?: AIProvider) => Promise<boolean>;
+    checkValidAPI: (key:string, baseUrl?:string) => Promise<boolean>;
     isKeyAuthenticated:boolean;
-    removeApiKey:(provider?: AIProvider) => void;
+    removeApiKey:() => void;
     openAiKey:string;
     setOpenAiKey:React.Dispatch<React.SetStateAction<string>>
-    geminiKey:string;
-    setGeminiKey:React.Dispatch<React.SetStateAction<string>>
     integrateX:() => void
     getXDetails: () => Promise<boolean>
     Xdata:Xdata | null
@@ -25,16 +23,12 @@ type AiContextType = {
     selectedBot:AiBot | null,
     setSelectedBot:React.Dispatch<React.SetStateAction<AiBot | null>>;
     aiBots:AiBot[]
-    getAssistantReply:(messages:Message[], setMessages:React.Dispatch<React.SetStateAction<Message[]>>, mediaFiles?: File[]) => void
+    getAssistantReply:(messages:Message[], setMessages:React.Dispatch<React.SetStateAction<Message[]>>) => void
     chats: Message[]
     setChats: React.Dispatch<React.SetStateAction<Message[]>>
     tIChats:Message[]
     setTIChats:React.Dispatch<React.SetStateAction<Message[]>>
-    // Provider management
-    currentProvider: AIProvider;
-    setCurrentProvider: React.Dispatch<React.SetStateAction<AIProvider>>;
-    isGeminiAuthenticated: boolean;
-    // OpenAI configuration methods
+    // New OpenAI configuration methods
     openAiConfig: OpenAIConfig;
     setOpenAiConfig: React.Dispatch<React.SetStateAction<OpenAIConfig>>;
     availableModels: { llm: OpenAIModel[], embedding: OpenAIModel[] };
@@ -42,14 +36,6 @@ type AiContextType = {
     fetchModels: (apiKey: string, baseUrl?: string) => Promise<boolean>;
     saveOpenAiConfig: (config: OpenAIConfig & { apiKey: string }) => Promise<boolean>;
     loadOpenAiConfig: () => Promise<void>;
-    // Gemini configuration methods
-    geminiConfig: GeminiConfig;
-    setGeminiConfig: React.Dispatch<React.SetStateAction<GeminiConfig>>;
-    availableGeminiModels: { llm: GeminiModel[], embedding: GeminiModel[] };
-    setAvailableGeminiModels: React.Dispatch<React.SetStateAction<{ llm: GeminiModel[], embedding: GeminiModel[] }>>;
-    fetchGeminiModels: (apiKey: string) => Promise<boolean>;
-    saveGeminiConfig: (config: GeminiConfig & { apiKey: string }) => Promise<boolean>;
-    loadGeminiConfig: () => Promise<void>;
 }
 
 type Xdata = {
@@ -94,36 +80,6 @@ export type Bot = {
     owned_by?: string;
   }
 
-  export interface GeminiConfig {
-    baseUrl: string;
-    llmModel: string;
-    embeddingModel: string;
-    project?: string;
-    location: string;
-  }
-
-  export interface GeminiModel {
-    id: string;
-    name: string;
-    displayName: string;
-    description?: string;
-    inputTokenLimit?: number;
-    outputTokenLimit?: number;
-    supportedGenerationMethods?: string[];
-  }
-
-  export type AIProvider = 'openai' | 'gemini';
-
-  export interface ProviderConfig {
-    openai: OpenAIConfig;
-    gemini: GeminiConfig;
-  }
-
-  export interface ProviderModels {
-    openai: { llm: OpenAIModel[], embedding: OpenAIModel[] };
-    gemini: { llm: GeminiModel[], embedding: GeminiModel[] };
-  }
-
 const AiContext =  createContext<AiContextType | undefined> (undefined);
 
 
@@ -132,9 +88,6 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
     const {showNotification} = useNotification();
     const [isKeyAuthenticated, setIsKeyAuthenticated] = useState<boolean>(false);
     const [openAiKey, setOpenAiKey] = useState<string>("");
-    const [geminiKey, setGeminiKey] = useState<string>("");
-    const [isGeminiAuthenticated, setIsGeminiAuthenticated] = useState<boolean>(false);
-    const [currentProvider, setCurrentProvider] = useState<AIProvider>('openai');
     const [Xdata, setXdata] = useState<Xdata | null>(null)
     const [isXIntegrated, setIsXIntegrated] = useState<boolean>(false);
 
@@ -144,26 +97,13 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
      const [chats, setChats] = useState<Message[]>([]);
      const [tIChats, setTIChats] = useState<Message[]>([]);
 
-    // OpenAI configuration state
+    // New OpenAI configuration state
     const [openAiConfig, setOpenAiConfig] = useState<OpenAIConfig>({
         baseUrl: "https://api.openai.com/v1",
         llmModel: "gpt-4",
         embeddingModel: "text-embedding-3-small"
     });
     const [availableModels, setAvailableModels] = useState<{ llm: OpenAIModel[], embedding: OpenAIModel[] }>({
-        llm: [],
-        embedding: []
-    });
-
-    // Gemini configuration state
-    const [geminiConfig, setGeminiConfig] = useState<GeminiConfig>({
-        baseUrl: "https://generativelanguage.googleapis.com/v1beta",
-        llmModel: "gemini-2.0-flash-exp",
-        embeddingModel: "text-embedding-004",
-        project: undefined,
-        location: "us-central1"
-    });
-    const [availableGeminiModels, setAvailableGeminiModels] = useState<{ llm: GeminiModel[], embedding: GeminiModel[] }>({
         llm: [],
         embedding: []
     });
@@ -182,14 +122,10 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
 
             const openAiAuth = localStorage.getItem("openAiAuth");
             if(openAiAuth) {
+
                     setIsKeyAuthenticated(true);
                     setOpenAiKey(openAiAuth);
-            }
 
-            const geminiAuth = localStorage.getItem("geminiAuth");
-            if(geminiAuth) {
-                    setIsGeminiAuthenticated(true);
-                    setGeminiKey(geminiAuth);
             }
         }
 
@@ -197,39 +133,33 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
         checkIfApiKeyValidOnStart();
         getBots();
         loadOpenAiConfig();
-        loadGeminiConfig();
 
 
     },[])
 
 
-    const checkValidAPI = async (key:string, baseUrl?: string, provider: AIProvider = 'openai') => {
+    const checkValidAPI = async (key:string, baseUrl?: string) => {
 
         try {
-            if (provider === 'gemini') {
-                // For Gemini, we'll use our backend endpoint to validate
-                const URL = `${domain}/api/v1/user/ai/gemini/models`;
-                await axios.post(URL, { apiKey: key }, { withCredentials: true });
-                setIsGeminiAuthenticated(true);
-            } else {
-                // For OpenAI-compatible APIs
-                const URL = `${baseUrl || openAiConfig.baseUrl}/models`;
-                await axios.get(URL, {
-                    headers:{
-                        Authorization: `Bearer ${key}`
-                    }
-                });
-                setIsKeyAuthenticated(true);
-            }
+            const URL = `${baseUrl || openAiConfig.baseUrl}/models`;
 
-            return true;
+            await axios.get(URL, {
+                headers:{
+                    Authorization: `Bearer ${key}`
+                }
+            })
+
+
+
+              setIsKeyAuthenticated(true);
+              return true;
 
         }
 
         catch(e) {
             console.log(e)
             showNotification({
-                message:`${provider === 'gemini' ? 'Gemini' : 'OpenAI'} API key is invalid or configuration is incorrect`,
+                message:"API key is invalid or base URL is incorrect",
                 type:"negative"
               })
               return false;
@@ -239,25 +169,16 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
 
     }
 
-    const removeApiKey = (provider: AIProvider = 'openai') => {
+    const removeApiKey = () => {
 
-        if (provider === 'gemini') {
-            localStorage.removeItem("geminiAuth")
-            setIsGeminiAuthenticated(false);
-            setGeminiKey("");
-            showNotification({
-                message:"Gemini API Key Deleted",
-                "type":"positive"
-            })
-        } else {
-            localStorage.removeItem("openAiAuth")
-            setIsKeyAuthenticated(false);
-            setOpenAiKey("");
-            showNotification({
-                message:"OpenAI API Key Deleted",
-                "type":"positive"
-            })
-        }
+        localStorage.removeItem("openAiAuth")
+        setIsKeyAuthenticated(false);
+        setOpenAiKey("");
+
+        showNotification({
+            message:"API Key Deleted",
+            "type":"positive"
+        })
     }
 
     const integrateX = () => {
@@ -370,6 +291,7 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
     } catch(err){
       console.log(err);
       showNotification({
+        //@ts-expect-error because of message
         message: (err as any).response?.data?.message || "Internal Server Error",
         type:"negative"
       })
@@ -392,41 +314,21 @@ export const AiContextProvider = ({children}:{children:React.ReactNode}) => {
     return true;
   }
 
-  const getAssistantReply = async (chatHistory: Message[], setMessages:React.Dispatch<React.SetStateAction<Message[]>>, mediaFiles?: File[]) => {
-    const hasOpenAI = checkIfKeyPresent();
-    const hasGemini = geminiKey && isGeminiAuthenticated;
-
-    if (!hasOpenAI && !hasGemini) {
+  const getAssistantReply = async (chatHistory: Message[], setMessages:React.Dispatch<React.SetStateAction<Message[]>>) => {
+    if(!checkIfKeyPresent()) {
         showNotification({
-            message:"No AI provider configured. Please add OpenAI or Gemini API key in Integrations Tab.",
-            type:"negative"
-        })
-        return;
-    }
-
-    // Use Gemini if available and we have media files, otherwise use the current provider
-    const useGemini = hasGemini && (mediaFiles?.length || currentProvider === 'gemini');
-
-    if (useGemini && !hasGemini) {
-        showNotification({
-            message:"Gemini API Key Not Added, Go To Integrations Tab.",
-            type:"negative"
-        })
-        return;
-    }
-
-    if (!useGemini && !hasOpenAI) {
-        showNotification({
-            message:"OpenAI API Key Not Added, Go To Integrations Tab.",
+            message:"OpenAi API Key Not Added, Go To Integrations Tab.",
             type:"negative"
         })
         return;
     }
     const lastMessage = chatHistory[0]?.content;
-    const embeddingVector = await getEmbedding(lastMessage || "", useGemini ? 'gemini' : 'openai') ;
+    const embeddingVector = await getEmbedding(lastMessage || "") ;
     const tweetContext = await getContext(embeddingVector);
 
-    const systemPrompt = `
+    const systemMessage: Message = {
+        role: "system",
+        content: `
 You are ${selectedBot?.name}. ${selectedBot?.profile}
 
 Use the following guidelines in all your responses:
@@ -436,12 +338,10 @@ Use the following guidelines in all your responses:
 • Include trending hashtags with proper spacing and, if needed, insert new lines for readability.
 • Use minimal or no emojis—only include them if they naturally fit the context.
 • If a subject is provided without a direct question, compose a tweet on that topic rather than asking for clarification.
-${mediaFiles?.length ? '• When images or videos are provided, analyze them and incorporate relevant insights into your tweet.' : ''}
 
 [CHAT MODE]
 • When the user asks a question or engages in conversation (that isn’t tweet-specific), answer in a natural, friendly tone while keeping responses under 500 characters.
 • Ensure that your replies reflect your coding expertise and personal style without exceeding the character limit.
-${mediaFiles?.length ? '• When images or videos are provided, analyze them and provide relevant insights or commentary.' : ''}
 
 Below is context gathered from 10 of your recent tweets (via vector search). Use this context to help guide your tone and style if it’s relevant, but do not mention the source:
 --------
@@ -454,193 +354,97 @@ Current Input:
 ${lastMessage}
 
 If the provided context lacks sufficient details for the request, rely on your profile summary and extensive coding experience to generate a response. Maintain your distinct voice in every answer.
-`;
-
-    if (useGemini) {
-      await handleGeminiResponse(systemPrompt, chatHistory, setMessages, mediaFiles);
-    } else {
-      const systemMessage: Message = {
-        role: "system",
-        content: systemPrompt
+`
       };
-      await handleOpenAIResponse(systemMessage, chatHistory, setMessages);
-    }
-  }
-
-  const handleOpenAIResponse = async (systemMessage: Message, chatHistory: Message[], setMessages: React.Dispatch<React.SetStateAction<Message[]>>) => {
-    const requestBody = {
-      model: openAiConfig.llmModel,
-      messages:[systemMessage, ...chatHistory],
-      stream:true
-    }
-    try {
-
-      const response = await fetch(`${openAiConfig.baseUrl}/chat/completions`, {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          Authorization: `Bearer ${openAiKey}`
-        },
-        body: JSON.stringify(requestBody)
-      })
-
-      if (!response.ok || !response.body) {
-        throw new Error("Stream response error");
+      const requestBody = {
+        model: openAiConfig.llmModel,
+        messages:[systemMessage, ...chatHistory],
+        stream:true
       }
+      try {
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let done = false;
-      let assistantReply ="";
-
-
-      setMessages((prev) => [...prev, {role:"assistant", content:" "}]);
-
-      while(!done) {
-        const {value, done:doneReading} = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value, {stream:true})
-
-        const lines = chunkValue.split("\n").filter((line) => line.trim() !=="");
-
-        for(const line of lines) {
-          if(line.startsWith("data: ")) {
-            const dataStr = line.replace("data: ","").trim();
-            if(dataStr === "[DONE]") {
-              done= true;
-              break;
-            }
-            try {
-              const parsed = JSON.parse(dataStr);
-              const content = parsed.choices[0]?.delta?.content;
-
-              if(content) {
-                assistantReply += content;
-
-                setMessages((prev) => {
-                  const updated = [...prev]
-                  const lastIndex = updated.length -1;
-                  updated[lastIndex] = {role:"assistant", content:assistantReply};
-                  return updated;
-                })
+        const response = await fetch(`${openAiConfig.baseUrl}/chat/completions`, {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+            Authorization: `Bearer ${openAiKey}`
+          },
+          body: JSON.stringify(requestBody)
+        })
+  
+        if (!response.ok || !response.body) {
+          throw new Error("Stream response error");
+        }
+  
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let done = false;
+        let assistantReply ="";
+  
+  
+        setMessages((prev) => [...prev, {role:"assistant", content:" "}]);
+  
+        while(!done) {
+          const {value, done:doneReading} = await reader.read();
+          done = doneReading;
+          const chunkValue = decoder.decode(value, {stream:true})
+  
+          const lines = chunkValue.split("\n").filter((line) => line.trim() !=="");
+  
+          for(const line of lines) {
+            if(line.startsWith("data: ")) {
+              const dataStr = line.replace("data: ","").trim();
+              if(dataStr === "[DONE]") {
+                done= true;
+                break;
               }
-            } catch(err) {
-              console.error("Error parsing stream chunk:", err);
+              try {
+                const parsed = JSON.parse(dataStr);
+                const content = parsed.choices[0]?.delta?.content;
+  
+                if(content) {
+                  assistantReply += content;
+  
+                  setMessages((prev) => {
+                    const updated = [...prev]
+                    const lastIndex = updated.length -1;
+                    updated[lastIndex] = {role:"assistant", content:assistantReply};
+                    return updated;
+                  })
+                }
+              } catch(err) {
+                console.error("Error parsing stream chunk:", err);
+              }
             }
           }
+  
         }
-
+  
+  
+      }
+      catch(err) {
+        console.error("Error during chat completion:", err);
+        showNotification({
+          message: "Error during chat completion",
+          type: "negative",
+        });
+  
       }
 
 
-    }
-    catch(err) {
-      console.error("Error during chat completion:", err);
-      showNotification({
-        message: "Error during chat completion",
-        type: "negative",
-      });
 
-    }
   }
 
-  const handleGeminiResponse = async (systemPrompt: string, chatHistory: Message[], setMessages: React.Dispatch<React.SetStateAction<Message[]>>, mediaFiles?: File[]) => {
-    try {
-      // Convert media files to base64 for Gemini
-      const mediaParts = [];
-      if (mediaFiles?.length) {
-        for (const file of mediaFiles) {
-          const base64 = await fileToBase64(file);
-          mediaParts.push({
-            inlineData: {
-              data: base64.split(',')[1], // Remove data:image/jpeg;base64, prefix
-              mimeType: file.type
-            }
-          });
-        }
-      }
-
-      // Prepare content for Gemini
-      const lastMessage = chatHistory[0]?.content;
-      const parts = [
-        { text: systemPrompt },
-        { text: `User: ${lastMessage}` },
-        ...mediaParts
-      ];
-
-      // Call Gemini API through our backend
-      const response = await fetch(`${domain}/api/v1/user/ai/gemini/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          model: geminiConfig.llmModel,
-          contents: [{ parts }]
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Gemini API request failed');
-      }
-
-      const data = await response.json();
-      const assistantReply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response generated';
-
-      setMessages((prev) => [...prev, {role:"assistant", content:assistantReply}]);
-
-    } catch(err) {
-      console.error("Error during Gemini chat completion:", err);
-      showNotification({
-        message: "Error during Gemini chat completion",
-        type: "negative",
-      });
-    }
-  }
-
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-    });
-  }
-
-  const getEmbedding = async (message:string, provider: AIProvider = 'openai') => {
+  const getEmbedding = async (message:string) => {
+    console.log(openAiKey)
     let embeddingVector:number[] =[];
     try {
-      if (provider === 'gemini' && geminiKey) {
-        // Use Gemini embedding through our backend
-        const response = await fetch(`${domain}/api/v1/user/ai/gemini/embed`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            model: geminiConfig.embeddingModel,
-            content: message
-          })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          embeddingVector = data.embedding?.values || [];
-        } else {
-          throw new Error('Gemini embedding failed');
-        }
-      } else {
-        // Use OpenAI embedding
-        console.log(openAiKey)
-        const embeddingResponse = await openai.embeddings.create({
-          model: openAiConfig.embeddingModel,
-          input: message,
-          encoding_format: "float",
-        });
-        embeddingVector = embeddingResponse.data[0].embedding;
-      }
+      const embeddingResponse = await openai.embeddings.create({
+        model: openAiConfig.embeddingModel,
+        input: message,
+        encoding_format: "float",
+      });
+      embeddingVector = embeddingResponse.data[0].embedding;
       return embeddingVector;
 
     } catch (err) {
@@ -682,7 +486,7 @@ If the provided context lacks sufficient details for the request, rely on your p
   const saveOpenAiConfig = async (config: OpenAIConfig & { apiKey: string }): Promise<boolean> => {
     try {
       const URL = `${domain}/api/v1/user/ai/config`;
-      await axios.post(URL, config, {
+      const result = await axios.post(URL, config, {
         withCredentials: true
       });
 
@@ -728,84 +532,6 @@ If the provided context lacks sufficient details for the request, rely on your p
     }
   };
 
-  // Gemini-specific methods
-  const fetchGeminiModels = async (apiKey: string): Promise<boolean> => {
-    try {
-      const URL = `${domain}/api/v1/user/ai/gemini/models`;
-      const result = await axios.post(URL, {
-        apiKey
-      }, {
-        withCredentials: true
-      });
-
-      setAvailableGeminiModels({
-        llm: result.data.models.llm || [],
-        embedding: result.data.models.embedding || []
-      });
-
-      return true;
-    } catch (err) {
-      console.log(err);
-      showNotification({
-        //@ts-expect-error because of message
-        message: err.response?.data?.message || "Failed to fetch Gemini models",
-        type: "negative"
-      });
-      return false;
-    }
-  };
-
-  const saveGeminiConfig = async (config: GeminiConfig & { apiKey: string }): Promise<boolean> => {
-    try {
-      const URL = `${domain}/api/v1/user/ai/gemini/config`;
-      await axios.post(URL, config, {
-        withCredentials: true
-      });
-
-      setGeminiConfig({
-        baseUrl: config.baseUrl,
-        llmModel: config.llmModel,
-        embeddingModel: config.embeddingModel,
-        project: config.project,
-        location: config.location
-      });
-
-      localStorage.setItem("geminiAuth", config.apiKey);
-      setGeminiKey(config.apiKey);
-      setIsGeminiAuthenticated(true);
-
-      showNotification({
-        message: "Gemini configuration saved successfully",
-        type: "positive"
-      });
-
-      return true;
-    } catch (err) {
-      console.log(err);
-      showNotification({
-        //@ts-expect-error because of message
-        message: err.response?.data?.message || "Failed to save Gemini configuration",
-        type: "negative"
-      });
-      return false;
-    }
-  };
-
-  const loadGeminiConfig = async (): Promise<void> => {
-    try {
-      const URL = `${domain}/api/v1/user/ai/gemini/config`;
-      const result = await axios.get(URL, {
-        withCredentials: true
-      });
-
-      if (result.data.config) {
-        setGeminiConfig(result.data.config);
-      }
-    } catch (err) {
-      console.log("No saved Gemini configuration found");
-    }
-  };
-
 
     return (
         <AiContext.Provider value={{
@@ -813,9 +539,6 @@ If the provided context lacks sufficient details for the request, rely on your p
             isKeyAuthenticated,
             removeApiKey,
             openAiKey,
-            setOpenAiKey,
-            geminiKey,
-            setGeminiKey,
             integrateX,
             getXDetails,
             Xdata,
@@ -829,26 +552,15 @@ If the provided context lacks sufficient details for the request, rely on your p
             setChats,
             setTIChats,
             tIChats,
-            // Provider management
-            currentProvider,
-            setCurrentProvider,
-            isGeminiAuthenticated,
-            // OpenAI configuration values
+            setOpenAiKey,
+            // New OpenAI configuration values
             openAiConfig,
             setOpenAiConfig,
             availableModels,
             setAvailableModels,
             fetchModels,
             saveOpenAiConfig,
-            loadOpenAiConfig,
-            // Gemini configuration values
-            geminiConfig,
-            setGeminiConfig,
-            availableGeminiModels,
-            setAvailableGeminiModels,
-            fetchGeminiModels,
-            saveGeminiConfig,
-            loadGeminiConfig
+            loadOpenAiConfig
         }} >
             {children}
         </AiContext.Provider>

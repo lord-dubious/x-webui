@@ -1,6 +1,5 @@
 // import DevTwitter from '@/components/dev-twitter'
 import OpenAiIntegration from '@/components/open-ai'
-import GeminiIntegration from '@/components/gemini-integration'
 import TwitterIntegration from '@/components/twitter-integration'
 import React from 'react'
 
@@ -10,9 +9,8 @@ const Integrations = () => {
         {/* <DevTwitter /> */}
         <TwitterIntegration />
         <OpenAiIntegration />
-        <GeminiIntegration />
-
-
+        
+      
     </div>
   )
 }

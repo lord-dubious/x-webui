@@ -1,8 +1,8 @@
   ![Homepage](https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHUQjQF1sv1N097MgFkwydKY3rmbRif5EsltJ6Q)
 
-# XTask
+# Tweetly
 
-**XTask** is a developer-focused platform that uses AI-powered bots to help you write, schedule, and publish tweets effortlessly. Built on a Turbo Repo architecture with Next.js on the frontend and an Express backend.
+**Tweetly** is a developer-focused platform that uses AI-powered bots to help you write, schedule, and publish tweets effortlessly. Built on a Turbo Repo architecture with Next.js on the frontend and an Express backend.
 
 ## Table of Contents
 
@@ -37,7 +37,7 @@ Here are some sample screenshots to showcase the UI:
 
 ## Installation
 
-XTask now runs as a combined application on a single port for easier deployment.
+Tweetly now runs as a combined application on a single port for easier deployment.
 
 ### Prerequisites
 
@@ -94,5 +94,5 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 ## License
 
-XTask is licensed under the **MIT License**.
+Tweetly is licensed under the **MIT License**.
 

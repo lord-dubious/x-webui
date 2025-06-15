@@ -19,9 +19,8 @@ const AppNavbar = () => {
     <SidebarSwitch onClick={setOpen} />
 
    <h1 className="text-2xl font-semibold">{
-   pathName.split("/")[2] ?
-     pathName.split("/")[2].slice(0,1).toUpperCase() + pathName.split("/")[2].slice(1)
-     : 'Dashboard'
+   pathName.split("/")[2]?.slice(0,1).toUpperCase() + pathName.split("/")[2].slice(1, pathName.split("/")[2].length)
+   
    }</h1>
 
         </div>

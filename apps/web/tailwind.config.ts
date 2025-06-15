@@ -13,16 +13,11 @@ const config = withUt({
   theme: {
     extend: {
       colors: {
-        customBlack: "#000000",
-        customWhite: "#FFFFFF",
-        customHover: "#1A1A1A",
-        customPurple: "#8B5CF6",
-        customPurpleDark: "#7C3AED",
-        customPurpleLight: "#A78BFA",
-        customSearch: "#1A1A1A",
-        customAccent: "#8B5CF6",
-        // Legacy support
-        customBlue: "#8B5CF6",
+        customBlack: "#000101",
+        customWhite: "#EEF3F5",
+        customHover: "#191819",
+        customBlue: "#1C9AF1",
+        customSearch: "#212326",
       },
     },
   },

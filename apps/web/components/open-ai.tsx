@@ -18,7 +18,9 @@ const OpenAiIntegration = () => {
     isKeyAuthenticated,
     removeApiKey,
     openAiKey,
+    setOpenAiKey,
     openAiConfig,
+    setOpenAiConfig,
     availableModels,
     fetchModels,
     saveOpenAiConfig

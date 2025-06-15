@@ -14,7 +14,7 @@ export default function HeroSection() {
         <div className="max-w-4xl mx-auto text-center">
           <Badge />
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-            XTask helps you write & schedule tweets{" "}  with AI Personalities that{" "}
+            Tweetly helps you write & schedule tweets{" "}  with AI Personalities that{" "}
             <span className="text-customBlue">
              
               <ReactTyped
@@ -28,13 +28,13 @@ export default function HeroSection() {
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
             Boost your dev vibe—Tweetly’s AI writes and schedules tweets in minutes, so you can code and shine on Twitter.
           </p>
-          <Link href="https://app.xtask.app/">
+          <Link href="https://app.tweetly.in/">
             <Button
               startIcon={<Sparkles size={18} className="animate-bounce" />}
               variant="secondary"
-              className="p-2 text-lg mx-auto !bg-customPurple !text-white"
+              className="p-2 text-lg mx-auto !bg-customBlue !text-white"
             >
-              Try XTask
+              Try Tweetly
             </Button>
           </Link>
         </div>

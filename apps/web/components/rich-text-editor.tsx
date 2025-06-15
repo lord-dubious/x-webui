@@ -7,7 +7,7 @@ import AreYouSure from "./are-you-sure";
 import ToolTip from "./ui/tooltip";
 import AddMediaPopup from "./add-media";
 import { FaMagic } from "react-icons/fa";
-import XTaskIntelligencePopup from "./xtask-intelligence-post";
+import TweetlyIntelligencePopup from "./tweetly-intelligence-post";
 
 
 const RichTextEditor = ({ className }: { className: string }) => {
@@ -17,7 +17,7 @@ const RichTextEditor = ({ className }: { className: string }) => {
 
   const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
   const [addMedia, setAddMedia] = useState<boolean>(false);
-  const [xtaskIntelligence, setXTaskIntelligence] =useState<boolean>(false);
+  const [tweetlyIntelligence, setTweetlyIntelligence] =useState<boolean>(false);
 
 
   useEffect(() => {
@@ -116,13 +116,13 @@ const RichTextEditor = ({ className }: { className: string }) => {
             }
 
             <div className="rounded-md border px-4 py-[8px] flex gap-2 items-center hover:border-customBlue group cursor-pointer"
-            onClick={() => setXTaskIntelligence(val => !val)}
+            onClick={() => setTweetlyIntelligence(val => !val)}
             >
             <FaMagic
             size={18}
-            title="XTask Intelligence"
+            title="Tweetly Intelligence"
             className="text-gray-500 cursor-pointer group-hover:text-customBlue"
-            onClick={() => setXTaskIntelligence(val => !val)}
+            onClick={() => setTweetlyIntelligence(val => !val)}
             />
             <p className="text-[12px] text-gray-500 group-hover:text-customBlue">
             Let Bots Write Tweet
@@ -133,9 +133,9 @@ const RichTextEditor = ({ className }: { className: string }) => {
 
            
             {
-              xtaskIntelligence && (
-                <XTaskIntelligencePopup
-                closePopup={setXTaskIntelligence}
+              tweetlyIntelligence && (
+                <TweetlyIntelligencePopup
+                closePopup={setTweetlyIntelligence}
                 />
               )
             }

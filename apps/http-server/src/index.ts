@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-      origin: ["http://localhost:4000", "https://dev.xtask.app", "https://app.xtask.app"],
+      origin: ["http://localhost:4000", "https://dev.tweetly.in", "https://app.tweetly.in"],
       credentials: true,
     })
   );
@@ -105,6 +105,30 @@ const nextProxy = createProxyMiddleware({
     target: 'http://localhost:3000',
     changeOrigin: true,
     ws: true, // Enable WebSocket proxying for hot reload
+    onError: (err, req, res) => {
+        console.error('Proxy error:', err.message);
+        if (!res.headersSent) {
+            res.status(500).send(`
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <title>Tweetly - Loading</title>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                    </head>
+                    <body>
+                        <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
+                            <div style="text-align: center;">
+                                <h1>Tweetly</h1>
+                                <p>Starting up... Please wait a moment and refresh.</p>
+                                <p>If this persists, please contact support.</p>
+                            </div>
+                        </div>
+                    </body>
+                </html>
+            `);
+        }
+    }
 });
 
 // Use proxy for all non-API routes

@@ -6,4 +6,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Use relative path for API calls since frontend and backend are on the same port
-export const domain = ""
+export const domain = process.env.NEXT_PUBLIC_DOMAIN || ""

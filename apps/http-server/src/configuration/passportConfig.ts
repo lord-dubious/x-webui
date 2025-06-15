@@ -5,81 +5,73 @@ import {GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, BASE_URL, prisma  } from "../con
 import { Strategy as TwitterStrategy, Profile as TwitterProfile} from "passport-twitter";
 
 
-// Only configure Google OAuth if credentials are provided
-if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_CLIENT_ID !== 'xyz' && GOOGLE_CLIENT_SECRET !== 'Gzyx') {
-    passport.use(
-        new GoogleStrategy(
-            {
-                clientID: GOOGLE_CLIENT_ID as string,
-                clientSecret: GOOGLE_CLIENT_SECRET as string,
-                callbackURL: `${BASE_URL}/api/v1/user/google/callback`,
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: GOOGLE_CLIENT_ID as string,
+            clientSecret: GOOGLE_CLIENT_SECRET as string,
+            callbackURL: `${BASE_URL}/api/v1/user/google/callback`,
+            
+
+    },
+
+    async (accessToken, refreshToken, profile:Profile, done) => {
+
+        try {
+            //This function runs first when they signup
+
+            console.log("Inside the callback function")
 
 
-        },
+            const {id, emails, displayName, photos} = profile;
 
-        async (accessToken, refreshToken, profile:Profile, done) => {
+            if (!emails || emails.length === 0) {
+                return done(new Error("No email found in Google profile"), false);
+            }
 
-            try {
-                //This function runs first when they signup
+            const email = emails[0]?.value; // safely access the first email
 
-                console.log("Inside the callback function")
+            if(!email) {
+              return;
+            }
 
-
-                const {id, emails, displayName, photos} = profile;
-
-                if (!emails || emails.length === 0) {
-                    return done(new Error("No email found in Google profile"), false);
+            let user = await prisma.user.findFirst({
+                where:{
+                    googleId:id
                 }
+            })
 
-                const email = emails[0]?.value; // safely access the first email
-
-                if(!email) {
-                  return;
-                }
-
-                let user = await prisma.user.findFirst({
-                    where:{
-                        googleId:id
+            if(!user) {
+                user = await prisma.user.create({
+                    data:{
+                        googleId:id,
+                        email:email,
+                        name:displayName,
+                        profilePicture:photos ? photos[0]?.value : "",
+                        authProvider:"google"
                     }
                 })
-
-                if(!user) {
-                    user = await prisma.user.create({
-                        data:{
-                            googleId:id,
-                            email:email,
-                            name:displayName,
-                            profilePicture:photos ? photos[0]?.value : "",
-                            authProvider:"google"
-                        }
-                    })
-                }
-                done(null, user);
-
             }
-            catch(err) {
-                done(err, false);
-            }
+            done(null, user);
+
         }
+        catch(err) {
+            done(err, false);
+        }
+    }
 
-    )
+)
+   
+)
 
-    )
-} else {
-    console.log("Google OAuth not configured - skipping Google strategy initialization");
-}
-
-// Only configure Twitter OAuth if credentials are provided
-if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET &&
-    process.env.TWITTER_CLIENT_ID !== 'xyz' && process.env.TWITTER_CLIENT_SECRET !== 'xyz') {
-    passport.use(
-        new TwitterStrategy(
-          {
-            consumerKey: process.env.TWITTER_CLIENT_ID as string, // Twitter API Key
-            consumerSecret: process.env.TWITTER_CLIENT_SECRET as string, // Twitter API Secret Key
-            callbackURL: `${process.env.BASE_URL}/api/v1/user/path/auth/twitter/callback`,
-            passReqToCallback: true, // Ensures `req` is passed to the callback
-          },
+passport.use(
+    new TwitterStrategy(
+      {
+        consumerKey: process.env.TWITTER_CLIENT_ID as string, // Twitter API Key
+        consumerSecret: process.env.TWITTER_CLIENT_SECRET as string, // Twitter API Secret Key
+        callbackURL: `${process.env.BASE_URL}/api/v1/user/path/auth/twitter/callback`,
+        passReqToCallback: true, // Ensures `req` is passed to the callback
+      },
       async (
         req: any,
         token: string, 
@@ -140,9 +132,6 @@ if (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET &&
       }
     )
   );
-} else {
-    console.log("Twitter OAuth not configured - skipping Twitter strategy initialization");
-}
 
 
 
