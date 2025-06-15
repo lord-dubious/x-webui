@@ -10,8 +10,8 @@ export default function NavBar() {
     <nav className="bg-black text-white ">
       <div className="max-w-7xl mx-auto px-6 pt-4 flex items-center justify-between">
         <div className="flex items-center ">
-          <Image src="https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHU2QWNPlyfmjfRU68YaiWIOdyEtVwNPohpD1J9" alt="Tweetly Logo" className="h-10 w-auto mr-2" title="logo" width={24} height={24} />
-          <span className="text-3xl font-bold">Tweetly</span>
+          <Image src="https://cytd5kmgz6.ufs.sh/f/aIroXtB9CoHU2QWNPlyfmjfRU68YaiWIOdyEtVwNPohpD1J9" alt="XTask Logo" className="h-10 w-auto mr-2" title="logo" width={24} height={24} />
+          <span className="text-3xl font-bold">XTask</span>
         </div>
         <div className="hidden md:flex items-center space-x-8">
           <Link href="/" className="hover:text-blue-400 transition">
