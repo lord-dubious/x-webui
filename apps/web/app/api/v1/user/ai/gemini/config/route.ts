@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaClient as prisma } from '@repo/db/client';
 import { getUserFromRequest } from '@/lib/auth';
-import { encryptData, decryptData } from '@/lib/crypto';
+import { encryptData } from '@/lib/crypto';
+import { validateUrl, validateApiKey, validateModelName } from '@/lib/validation';
 
 // GET - Get user's Gemini configuration
 export async function GET(request: NextRequest) {
@@ -49,6 +50,33 @@ export async function POST(request: NextRequest) {
         if (!apiKey) {
             return NextResponse.json({
                 message: "API key is required"
+            }, { status: 400 });
+        }
+
+        // Validate API key format
+        if (!validateApiKey(apiKey, 'gemini')) {
+            return NextResponse.json({
+                message: "Invalid API key format"
+            }, { status: 400 });
+        }
+
+        // Validate base URL if provided
+        if (baseUrl && !validateUrl(baseUrl)) {
+            return NextResponse.json({
+                message: "Invalid or unsafe base URL"
+            }, { status: 400 });
+        }
+
+        // Validate model names
+        if (llmModel && !validateModelName(llmModel)) {
+            return NextResponse.json({
+                message: "Invalid LLM model name"
+            }, { status: 400 });
+        }
+
+        if (embeddingModel && !validateModelName(embeddingModel)) {
+            return NextResponse.json({
+                message: "Invalid embedding model name"
             }, { status: 400 });
         }
 

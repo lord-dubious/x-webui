@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaClient as prisma } from '@repo/db/client';
 import { getUserFromRequest } from '@/lib/auth';
-import { encryptData, decryptData } from '@/lib/crypto';
+import { encryptData } from '@/lib/crypto';
 import { validateUrl, validateApiKey, validateModelName } from '@/lib/validation';
 
 // GET - Get user's OpenAI configuration
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
         if (config) {
             // Decrypt API key for display (masked)
-            const hasApiKey = config.apiKey ? true : false;
+            const hasApiKey = !!config.apiKey;
             return NextResponse.json({
                 message: "OpenAI configuration retrieved",
                 config: {

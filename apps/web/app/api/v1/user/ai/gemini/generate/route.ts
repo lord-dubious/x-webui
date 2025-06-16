@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaClient as prisma } from '@repo/db/client';
 import { getUserFromRequest } from '@/lib/auth';
+import { decryptData } from '@/lib/crypto';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // POST - Generate content with Gemini (with multimodal support)
@@ -21,7 +22,9 @@ export async function POST(request: NextRequest) {
             }, { status: 400 });
         }
 
-        const genAI = new GoogleGenerativeAI(config.apiKey);
+        // Decrypt the API key before use
+        const decryptedApiKey = decryptData(config.apiKey);
+        const genAI = new GoogleGenerativeAI(decryptedApiKey);
         const geminiModel = genAI.getGenerativeModel({ 
             model: model || config.llmModel 
         });

@@ -84,7 +84,7 @@ const GeminiIntegration = () => {
 
     setLoading(true);
 
-    console.log("Validating Gemini API Key and saving configuration");
+    // console.debug("Validating Gemini API Key and saving configuration");
 
     // First validate the API key
     const isValid = await checkValidAPI(key, undefined, 'gemini');

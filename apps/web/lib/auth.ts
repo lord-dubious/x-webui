@@ -34,8 +34,8 @@ export async function getUserFromRequest(request: NextRequest) {
             }
         }
 
-        // Fallback for development/testing - check headers
-        if (!user && (userIdHeader || emailHeader)) {
+        // Fallback for development/testing only - check headers
+        if (!user && (userIdHeader || emailHeader) && process.env.NODE_ENV !== 'production') {
             if (emailHeader) {
                 user = await prisma.user.findUnique({
                     where: { email: emailHeader }

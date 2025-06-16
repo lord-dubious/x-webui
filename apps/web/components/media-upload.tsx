@@ -54,7 +54,7 @@ const MediaUpload: React.FC<MediaUploadProps> = ({ onMediaChange, maxFiles = 4 }
     // Revoke object URL for the removed file
     const fileKey = `${fileToRemove.name}-${fileToRemove.size}`
     const url = previewUrls.get(fileKey)
-    if (url && url.startsWith('blob:')) {
+    if (url?.startsWith('blob:')) {
       URL.revokeObjectURL(url)
       const newPreviewUrls = new Map(previewUrls)
       newPreviewUrls.delete(fileKey)
