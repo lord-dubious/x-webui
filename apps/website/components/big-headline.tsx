@@ -20,7 +20,7 @@ export default function BigHeadline() {
           }`}
         >
           AI-powered tweets, <br />
-       <span className=" bg-customBlue rounded-md px-2 ">automated publishing, </span> <br />
+       <span className=" bg-customPurple rounded-md px-2 ">automated publishing, </span> <br />
           and hands-free growth.
         </h1>
         <p
@@ -28,7 +28,7 @@ export default function BigHeadline() {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
           }`}
         >
-          Let Tweetly handle your Twitter game while you focus on coding. 
+          Let XTask handle your Twitter game while you focus on coding.
           Generate, schedule, and grow.
         </p>
       </div>

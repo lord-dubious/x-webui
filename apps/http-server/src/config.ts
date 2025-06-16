@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+
+// Load .env from the workspace root
+dotenv.config({ path: path.join(__dirname, "../../../.env") });
 
 import {prismaClient} from "@repo/db/client"
 

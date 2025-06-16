@@ -7,6 +7,8 @@ import { useNotification } from "./notification/notificationContext";
 import QuickQuestions from "./quick-questions";
 import { Message, UseAi } from "@/lib/aiContext";
 import Image from "next/image";
+import ProviderSelector from "./provider-selector";
+import MediaUpload from "./media-upload";
 
 
 const ChatWithBot = () => {
@@ -16,6 +18,7 @@ const ChatWithBot = () => {
   const messageRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const {selectedBot, getAssistantReply, chats, setChats} = UseAi();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +35,7 @@ const ChatWithBot = () => {
 
   
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     setLoading(true)
       e.preventDefault();
     if(!input.trim()) {
@@ -50,7 +53,8 @@ const ChatWithBot = () => {
     setChats(newChats);
     setInput("");
 
-    await getAssistantReply(newChats, setChats);
+    await getAssistantReply(newChats, setChats, mediaFiles);
+    setMediaFiles([]); // Clear media files after sending
     setLoading(false);
   }
 
@@ -61,7 +65,8 @@ const ChatWithBot = () => {
     setChats(newChats);
     setInput("");
 
-    await getAssistantReply(newChats, setChats);
+    await getAssistantReply(newChats, setChats, mediaFiles);
+    setMediaFiles([]); // Clear media files after sending
     setLoading(false);
 
   }
@@ -87,9 +92,18 @@ const ChatWithBot = () => {
               </div>
             </h1>
             
-      </div>  
+      </div>
 
-   
+      {/* Provider Selector */}
+      <div className="p-4 border-b">
+        <ProviderSelector />
+      </div>
+
+      {/* Media Upload for Gemini */}
+      <div className="p-4">
+        <MediaUpload onMediaChange={setMediaFiles} />
+      </div>
+
       <div className="flex flex-col   items-start p-4  h-full  overflow-auto relative" ref={messagesEndRef} id="chats"
       >
 

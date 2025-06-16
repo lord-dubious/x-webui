@@ -506,7 +506,7 @@ postRouter.post("/scheduletweetwithoutmedia", async(req, res) => {
     const postId= req.body.currentPostId;
     console.log(req.body.schedulingTime);
     const time = (req.body.schedulingTime);
-    const parsedDate = moment(time, "DD/MM/YYYY hh:mm A");
+    const parsedDate = moment(time, "DD/MM/YYYY hh:mm A").toDate();
     console.log(time);
     console.log("this is time");
     try {
