@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Button } from './ui/button'
 import { Upload, X, Image, Video } from 'lucide-react'
 import { UseAi } from '@/lib/aiContext'
@@ -12,8 +12,20 @@ interface MediaUploadProps {
 
 const MediaUpload: React.FC<MediaUploadProps> = ({ onMediaChange, maxFiles = 4 }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [previewUrls, setPreviewUrls] = useState<Map<string, string>>(new Map())
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { currentProvider } = UseAi()
+
+  // Cleanup object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach(url => {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url)
+        }
+      })
+    }
+  }, [previewUrls])
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -36,6 +48,19 @@ const MediaUpload: React.FC<MediaUploadProps> = ({ onMediaChange, maxFiles = 4 }
   }
 
   const removeFile = (index: number) => {
+    const fileToRemove = uploadedFiles[index]
+    if (!fileToRemove) return
+
+    // Revoke object URL for the removed file
+    const fileKey = `${fileToRemove.name}-${fileToRemove.size}`
+    const url = previewUrls.get(fileKey)
+    if (url && url.startsWith('blob:')) {
+      URL.revokeObjectURL(url)
+      const newPreviewUrls = new Map(previewUrls)
+      newPreviewUrls.delete(fileKey)
+      setPreviewUrls(newPreviewUrls)
+    }
+
     const newFiles = uploadedFiles.filter((_, i) => i !== index)
     setUploadedFiles(newFiles)
     onMediaChange(newFiles)
@@ -60,7 +85,20 @@ const MediaUpload: React.FC<MediaUploadProps> = ({ onMediaChange, maxFiles = 4 }
 
   const getFilePreview = (file: File) => {
     if (file.type.startsWith('image/')) {
-      return URL.createObjectURL(file)
+      const fileKey = `${file.name}-${file.size}`
+
+      // Check if we already have a URL for this file
+      if (previewUrls.has(fileKey)) {
+        return previewUrls.get(fileKey)!
+      }
+
+      // Create new object URL and store it
+      const url = URL.createObjectURL(file)
+      const newPreviewUrls = new Map(previewUrls)
+      newPreviewUrls.set(fileKey, url)
+      setPreviewUrls(newPreviewUrls)
+
+      return url
     }
     return null
   }

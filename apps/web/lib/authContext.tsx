@@ -246,7 +246,7 @@ const {showNotification} = useNotification();
         });
         Cookies.remove("auth_token", {
           path: "/",
-          domain: isProduction ? ".tweetly.in" : undefined,
+          domain: isProduction ? ".xtask.app" : undefined,
         });
         setIsAuthenticated(false);
         await router.push("/login");

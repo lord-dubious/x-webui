@@ -55,13 +55,21 @@ export function verifyJWTToken(token: string): { userId: string; email: string }
                 email: decoded.email
             };
         } catch (newFormatError) {
-            // Fallback to old format for compatibility
-            const decoded = jwt.verify(token, secret) as any;
+            // Only fallback for format errors, not expiration or other security issues
+            if (newFormatError instanceof jwt.JsonWebTokenError &&
+                (newFormatError.message.includes('invalid issuer') ||
+                 newFormatError.message.includes('invalid audience'))) {
 
-            return {
-                userId: decoded.id, // Old format uses 'id' instead of 'userId'
-                email: decoded.email || '' // Old format might not have email
-            };
+                // Fallback to old format for compatibility
+                const decoded = jwt.verify(token, secret) as any;
+
+                return {
+                    userId: decoded.id, // Old format uses 'id' instead of 'userId'
+                    email: decoded.email || '' // Old format might not have email
+                };
+            }
+            // Re-throw security-related errors (expired, invalid signature, etc.)
+            throw newFormatError;
         }
     } catch (error) {
         console.error('JWT verification failed:', error);
@@ -71,9 +79,14 @@ export function verifyJWTToken(token: string): { userId: string; email: string }
 
 // Encrypt sensitive data
 export function encryptData(data: string): string {
-    const key = process.env.ENCRYPTION_KEY || generateEncryptionKey();
+    const key = process.env.ENCRYPTION_KEY;
+    if (!key) {
+        throw new Error('ENCRYPTION_KEY environment variable is required');
+    }
+
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key, 'hex').slice(0, 32), iv);
+    const keyBuffer = Buffer.from(key, 'hex').slice(0, 32);
+    const cipher = crypto.createCipheriv('aes-256-cbc', keyBuffer, iv);
 
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
@@ -83,7 +96,11 @@ export function encryptData(data: string): string {
 
 // Decrypt sensitive data
 export function decryptData(encryptedData: string): string {
-    const key = process.env.ENCRYPTION_KEY || generateEncryptionKey();
+    const key = process.env.ENCRYPTION_KEY;
+    if (!key) {
+        throw new Error('ENCRYPTION_KEY environment variable is required');
+    }
+
     const [ivHex, encrypted] = encryptedData.split(':');
 
     if (!ivHex || !encrypted) {

@@ -53,7 +53,7 @@ const Login = () => {
   return (
     <div className="md:w-[30%] min-w-[350px]">
       <div className=" p-4 border rounded-md  shadow-[1px_1px_2px_rgba(255,255,255,0.1)] ">
-        <h1 className="text-2xl font-bold py-2 ">Login with Tweetly</h1>
+        <h1 className="text-2xl font-bold py-2 ">Login with XTask</h1>
         <p className="dark:text-gray-300 text-gray-500 text-sm pb-2">
           Enter your email below to login to your account
         </p>

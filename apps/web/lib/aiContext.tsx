@@ -639,7 +639,7 @@ If the provided context lacks sufficient details for the request, rely on your p
           input: message,
           encoding_format: "float",
         });
-        embeddingVector = embeddingResponse.data[0].embedding;
+        embeddingVector = embeddingResponse.data[0]?.embedding || [];
       }
       return embeddingVector;
 

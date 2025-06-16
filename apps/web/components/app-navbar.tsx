@@ -20,7 +20,7 @@ const AppNavbar = () => {
 
    <h1 className="text-2xl font-semibold">{
    pathName.split("/")[2] ?
-     pathName.split("/")[2].slice(0,1).toUpperCase() + pathName.split("/")[2].slice(1)
+     pathName.split("/")[2]!.slice(0,1).toUpperCase() + pathName.split("/")[2]!.slice(1)
      : 'Dashboard'
    }</h1>
 

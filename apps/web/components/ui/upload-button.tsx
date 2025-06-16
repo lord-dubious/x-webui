@@ -25,7 +25,8 @@ export const OurUploadDropzone = ({ setSelectedMenu} :{
     onClientUploadComplete={ async (res) => {
       // Do something with the response
       console.log("Files: ", res);
-     const result=  await uploadMedia(res);
+     // TODO: Fix type mismatch between ClientUploadedFileData and FileType
+     const result=  await uploadMedia(res as any);
      if(result) {
        setSelectedMenu("YOUR_IMAGES");
 

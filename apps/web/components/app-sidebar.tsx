@@ -90,7 +90,7 @@ export function AppSidebar() {
             height={50}
           />
           {open && (
-            <h1 className="text-4xl font-bold cursor-pointer">Tweetly</h1>
+            <h1 className="text-4xl font-bold cursor-pointer">XTask</h1>
           )}
         </Link>
 

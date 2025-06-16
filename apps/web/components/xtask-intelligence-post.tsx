@@ -65,7 +65,7 @@ const XTaskIntelligencePopup = (
 
      const handleUseIt = async () => {
       if(tIChats.length>1) {
-        const aiTweet = tIChats[tIChats.length-1].content || "";
+        const aiTweet = tIChats[tIChats.length-1]?.content || "";
         settinngAiTweet(aiTweet);
         closePopup(val =>  !val);
       } else {
@@ -189,7 +189,7 @@ className='text-customBlue mr-1'
   <div className="w-[60%]  dark:bg-gray-800 bg-gray-50 rounded-md min-h-full max-h-[70vh] overflow-auto" id="right">
 
    <PreviewTweet currentTweet={
-    tIChats.length>1 && tIChats[tIChats.length-1].role ==="assistant"?tIChats[tIChats.length-1].content:""
+    tIChats.length>1 && tIChats[tIChats.length-1]?.role ==="assistant"?(tIChats[tIChats.length-1]?.content || ""):""
     } currentPostMedia={currentPostMedia} previewClaim={false} />
   </div>
 

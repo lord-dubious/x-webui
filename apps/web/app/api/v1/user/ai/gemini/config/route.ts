@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prismaClient as prisma } from '@repo/db/client';
-
-// Helper function to get user from session (simplified for now)
-async function getUserFromRequest(request: NextRequest) {
-    // For now, we'll use a simple approach
-    // In production, you'd use proper session management
-    const userId = request.headers.get('x-user-id');
-    if (!userId) {
-        throw new Error('Unauthorized');
-    }
-    return { id: userId };
-}
+import { getUserFromRequest } from '@/lib/auth';
+import { encryptData, decryptData } from '@/lib/crypto';
 
 // GET - Get user's Gemini configuration
 export async function GET(request: NextRequest) {
@@ -61,21 +52,24 @@ export async function POST(request: NextRequest) {
             }, { status: 400 });
         }
 
+        // Encrypt the API key before storing
+        const encryptedApiKey = encryptData(apiKey);
+
         const config = await prisma.geminiConfig.upsert({
             where: { userId: user.id },
             update: {
-                apiKey,
+                apiKey: encryptedApiKey,
                 baseUrl: baseUrl || "https://generativelanguage.googleapis.com/v1beta",
-                llmModel: llmModel || "gemini-2.0-flash-exp",
+                llmModel: llmModel || "gemini-1.5-flash", // Use stable model
                 embeddingModel: embeddingModel || "text-embedding-004",
                 project: project || null,
                 location: location || "us-central1"
             },
             create: {
                 userId: user.id,
-                apiKey,
+                apiKey: encryptedApiKey,
                 baseUrl: baseUrl || "https://generativelanguage.googleapis.com/v1beta",
-                llmModel: llmModel || "gemini-2.0-flash-exp",
+                llmModel: llmModel || "gemini-1.5-flash", // Use stable model
                 embeddingModel: embeddingModel || "text-embedding-004",
                 project: project || null,
                 location: location || "us-central1"
