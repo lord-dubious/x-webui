@@ -29,7 +29,5 @@ jobs:
                                   pnpm install
                                   echo "everything set here"
                                   pnpm run build
-                                  pm2 restart web
                                   pm2 restart http-server
-                                  pm2 restart website
     
